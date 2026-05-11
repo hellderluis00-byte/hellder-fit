@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Hellder Fit"/>
+  <title>Hellder Fit</title>
+
+  <!-- Fontes -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+
+  <!-- React + Babel (roda direto no navegador, sem instalação) -->
+
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #080808; --surface: #111111; --surface2: #1a1a1a; --surface3: #222222;
+      --border: #2a2a2a; --accent: #c8f135; --accent2: #ff4d4d; --accent3: #4dffa0;
+      --text: #f0f0f0; --muted: #666666; --gold: #f5c518;
+    }
+    html, body { height: 100%; background: var(--bg); }
+    body { color: var(--text); font-family: 'DM Sans', sans-serif; overflow: hidden; height: 100dvh; }
+    .app { display: flex; flex-direction: column; height: 100dvh; max-width: 430px; margin: 0 auto; position: relative; overflow: hidden; background: var(--bg); }
+    .scroll { overflow-y: auto; flex: 1; padding-bottom: 80px; }
+    .scroll::-webkit-scrollbar { width: 0; }
+    .nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: rgba(10,10,10,0.97); backdrop-filter: blur(20px); border-top: 1px solid var(--border); display: flex; z-index: 100; padding-bottom: env(safe-area-inset-bottom); }
+    .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 0 12px; font-size: 10px; font-family: 'DM Sans'; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s; border: none; background: none; text-transform: uppercase; }
+    .nav-btn.active { color: var(--accent); }
+    .nav-btn svg { width: 22px; height: 22px; }
+    .hero { background: linear-gradient(180deg,#1a1a1a 0%,var(--bg) 100%); padding: 20px 20px 0; position: relative; overflow: hidden; }
+    .hero::before { content:''; position:absolute; top:-50px; right:-50px; width:200px; height:200px; background:radial-gradient(circle,rgba(200,241,53,0.12) 0%,transparent 70%); pointer-events:none; }
+    .hero-greeting { font-family:'Space Mono'; font-size:11px; color:var(--accent); letter-spacing:2px; text-transform:uppercase; margin-bottom:4px; }
+    .hero-name { font-family:'Bebas Neue'; font-size:42px; letter-spacing:2px; line-height:1; color:var(--text); }
+    .hero-sub { font-size:13px; color:var(--muted); margin-top:4px; font-weight:300; }
+    .stats-bar { display:flex; gap:12px; padding:16px 20px; }
+    .stat-pill { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px 12px; text-align:center; }
+    .stat-val { font-family:'Bebas Neue'; font-size:22px; color:var(--accent); }
+    .stat-lbl { font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; font-weight:600; }
+    .week-bar { padding:0 20px 16px; }
+    .week-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; font-weight:600; margin-bottom:10px; font-family:'Space Mono'; }
+    .week-days { display:flex; gap:6px; }
+    .day-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; padding:8px 4px; border-radius:10px; cursor:pointer; border:1px solid transparent; background:var(--surface); transition:all 0.2s; }
+    .day-btn .dn { font-size:9px; color:var(--muted); font-weight:700; text-transform:uppercase; }
+    .day-btn .dd { font-family:'Bebas Neue'; font-size:18px; color:var(--text); line-height:1; }
+    .day-btn .dot { width:4px; height:4px; border-radius:50%; background:transparent; }
+    .day-btn.today { border-color:var(--accent); background:rgba(200,241,53,0.06); }
+    .day-btn.today .dd { color:var(--accent); }
+    .day-btn.has-w .dot { background:var(--accent); }
+    .day-btn.rest .dot { background:var(--muted); }
+    .day-btn.sel { border-color:var(--accent); background:rgba(200,241,53,0.1); }
+    .section { padding:0 20px; margin-bottom:16px; }
+    .section-title { font-family:'Space Mono'; font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:10px; }
+    .wcard { background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; cursor:pointer; transition:all 0.2s; margin-bottom:8px; }
+    .wcard:active { transform:scale(0.98); }
+    .wcard-hdr { padding:16px; display:flex; align-items:center; gap:12px; }
+    .wicon { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+    .wicon.push { background:linear-gradient(135deg,rgba(255,77,77,0.3),rgba(255,77,77,0.1)); }
+    .wicon.pull { background:linear-gradient(135deg,rgba(77,255,160,0.3),rgba(77,255,160,0.1)); }
+    .wicon.legs { background:linear-gradient(135deg,rgba(200,241,53,0.3),rgba(200,241,53,0.1)); }
+    .wicon.upper { background:linear-gradient(135deg,rgba(100,150,255,0.3),rgba(100,150,255,0.1)); }
+    .wicon.lower { background:linear-gradient(135deg,rgba(255,165,0,0.3),rgba(255,165,0,0.1)); }
+    .tbadge { display:inline-block; font-size:9px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding:3px 8px; border-radius:6px; margin-bottom:4px; }
+    .tbadge.push{background:rgba(255,77,77,0.15);color:#ff4d4d;} .tbadge.pull{background:rgba(77,255,160,0.15);color:#4dffa0;}
+    .tbadge.legs{background:rgba(200,241,53,0.15);color:var(--accent);} .tbadge.upper{background:rgba(100,150,255,0.15);color:#6496ff;}
+    .tbadge.lower{background:rgba(255,165,0,0.15);color:orange;}
+    .wcard-name { font-family:'Bebas Neue'; font-size:22px; color:var(--text); letter-spacing:1px; line-height:1; }
+    .wcard-meta { font-size:12px; color:var(--muted); margin-top:2px; }
+    .rest-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:20px; text-align:center; }
+    .today-wcard { background:linear-gradient(135deg,#1a1f0a,#111); border:1px solid rgba(200,241,53,0.3); border-radius:16px; padding:20px; margin:0 20px 16px; position:relative; overflow:hidden; cursor:pointer; }
+    .today-wcard::before { content:''; position:absolute; top:-30px; right:-30px; width:120px; height:120px; background:radial-gradient(circle,rgba(200,241,53,0.15) 0%,transparent 70%); }
+    .today-tag { font-family:'Space Mono'; font-size:9px; color:var(--accent); letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; }
+    .today-wname { font-family:'Bebas Neue'; font-size:36px; letter-spacing:2px; line-height:1; }
+    .today-wsub { font-size:13px; color:var(--muted); margin-top:4px; }
+    .start-btn { display:flex; align-items:center; gap:8px; margin-top:16px; background:var(--accent); color:#000; font-weight:700; font-size:13px; letter-spacing:1px; text-transform:uppercase; padding:12px 20px; border-radius:12px; border:none; cursor:pointer; width:100%; justify-content:center; font-family:'DM Sans'; }
+    /* WORKOUT VIEW */
+    .wview { position:absolute; inset:0; background:var(--bg); z-index:40; overflow-y:auto; }
+    .wview::-webkit-scrollbar{width:0;}
+    .wview-hero { padding:20px; padding-top:54px; background:linear-gradient(135deg,#0f1a00,#080808); border-bottom:1px solid var(--border); position:relative; }
+    .back-btn { position:absolute; top:16px; left:16px; z-index:10; width:36px; height:36px; border-radius:50%; background:rgba(0,0,0,0.6); backdrop-filter:blur(10px); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text); }
+    .wview-type { font-family:'Space Mono'; font-size:10px; color:var(--accent); letter-spacing:2px; text-transform:uppercase; margin-bottom:4px; }
+    .wview-name { font-family:'Bebas Neue'; font-size:40px; letter-spacing:2px; line-height:1; }
+    .wview-meta { font-size:13px; color:var(--muted); margin-top:6px; }
+    .prog-bar { height:3px; background:var(--border); margin-top:16px; border-radius:2px; }
+    .prog-fill { height:100%; background:var(--accent); border-radius:2px; transition:width 0.4s; }
+    .finish-btn { margin:16px 20px; color:#000; font-weight:700; font-size:14px; letter-spacing:1px; text-transform:uppercase; padding:16px; border-radius:14px; border:none; cursor:pointer; width:calc(100% - 40px); font-family:'DM Sans'; }
+    /* EXERCISE ITEM */
+    .ex-item { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 16px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:all 0.2s; margin-bottom:8px; }
+    .ex-item:active { transform:scale(0.98); background:var(--surface2); }
+    .ex-num { font-family:'Bebas Neue'; font-size:28px; color:var(--border); line-height:1; width:28px; flex-shrink:0; }
+    .ex-info { flex:1; }
+    .ex-name { font-size:14px; font-weight:600; color:var(--text); }
+    .ex-meta { font-size:12px; color:var(--muted); margin-top:2px; }
+    .ex-check { width:24px; height:24px; border-radius:8px; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.2s; }
+    .ex-check.done { border-color:var(--accent); background:var(--accent); }
+    /* EXERCISE DETAIL */
+    .ex-detail { position:absolute; inset:0; background:var(--bg); z-index:50; overflow-y:auto; }
+    .ex-detail::-webkit-scrollbar{width:0;}
+    .ex-hero { height:200px; background:linear-gradient(135deg,#1a1a1a,#0d0d0d); display:flex; align-items:center; justify-content:center; font-size:80px; position:relative; overflow:hidden; }
+    .ex-hero::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 50%,var(--bg) 100%); }
+    .ex-body { padding:0 20px 100px; }
+    .ex-title { font-family:'Bebas Neue'; font-size:32px; letter-spacing:2px; color:var(--text); margin-bottom:4px; }
+    .badge-row { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+    .sbadge { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:4px 10px; font-size:12px; font-weight:600; color:var(--muted); }
+    .sbadge.a { border-color:var(--accent); color:var(--accent); background:rgba(200,241,53,0.08); }
+    .sbadge.g { border-color:#4dffa0; color:#4dffa0; background:rgba(77,255,160,0.06); }
+    .tip-box { background:var(--surface); border-left:3px solid var(--accent); border-radius:0 12px 12px 0; padding:14px 16px; margin-bottom:16px; font-size:13px; color:var(--text); line-height:1.6; }
+    .yt-btn { display:flex; align-items:center; gap:10px; background:linear-gradient(135deg,#ff0000,#cc0000); color:#fff; border:none; border-radius:14px; padding:14px 18px; width:100%; cursor:pointer; font-family:'DM Sans'; font-weight:700; font-size:14px; margin-bottom:16px; text-decoration:none; justify-content:center; }
+    .yt-icon { width:28px; height:28px; background:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .yt-icon svg { width:18px; height:18px; fill:#ff0000; }
+    .action-row { display:flex; gap:8px; margin-bottom:24px; }
+    .action-btn { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 8px; display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; transition:all 0.2s; font-size:11px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:0.5px; font-family:'DM Sans'; }
+    .action-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(200,241,53,0.06); }
+    .log-section { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:16px; }
+    .log-title { font-family:'Space Mono'; font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:12px; }
+    .set-row { display:flex; gap:8px; align-items:center; margin-bottom:8px; }
+    .set-label { font-size:12px; font-weight:700; color:var(--muted); width:40px; font-family:'Space Mono'; }
+    .set-input { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:8px 12px; color:var(--text); font-size:14px; font-family:'DM Sans'; text-align:center; width:0; }
+    .set-input:focus { outline:none; border-color:var(--accent); }
+    .set-unit { font-size:11px; color:var(--muted); width:24px; }
+    .add-set-btn { width:100%; padding:10px; border-radius:10px; border:1px dashed var(--border); background:transparent; color:var(--muted); font-size:13px; cursor:pointer; font-family:'DM Sans'; margin-top:4px; }
+    .save-btn { width:100%; padding:14px; border-radius:12px; border:none; background:var(--accent); color:#000; font-weight:700; font-size:14px; cursor:pointer; font-family:'DM Sans'; }
+    .hist-item { background:var(--surface2); border-radius:10px; padding:12px 14px; margin-bottom:8px; }
+    .hist-date { font-family:'Space Mono'; font-size:10px; color:var(--accent); margin-bottom:6px; }
+    .sub-card { background:var(--surface2); border-radius:12px; padding:12px 14px; margin-bottom:8px; border:1px solid var(--border); }
+    .sub-yt { display:flex; align-items:center; gap:8px; background:rgba(255,0,0,0.12); border:1px solid rgba(255,0,0,0.25); color:#ff4444; border-radius:8px; padding:8px 12px; font-size:12px; font-weight:700; text-decoration:none; margin-top:8px; }
+    .sub-yt svg { width:16px; height:16px; fill:#ff4444; flex-shrink:0; }
+    /* DIET */
+    .macro-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+    .macro-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px; }
+    .macro-val { font-family:'Bebas Neue'; font-size:32px; color:var(--accent); line-height:1; }
+    .macro-lbl { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; font-weight:600; margin-top:2px; }
+    .macro-sub { font-size:11px; color:var(--muted); margin-top:2px; }
+    .macro-bar { height:3px; background:var(--border); border-radius:2px; margin-top:8px; }
+    .macro-fill { height:100%; border-radius:2px; }
+    .meal-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; margin-bottom:10px; overflow:hidden; }
+    .meal-hdr { padding:14px 16px; display:flex; align-items:center; gap:10px; cursor:pointer; }
+    .meal-time { font-family:'Space Mono'; font-size:11px; color:var(--accent); }
+    .meal-name { font-size:15px; font-weight:600; color:var(--text); }
+    .meal-kcal { margin-left:auto; font-family:'Space Mono'; font-size:11px; color:var(--muted); }
+    .meal-body { padding:0 16px 14px; border-top:1px solid var(--border); }
+    .food-item { display:flex; justify-content:space-between; align-items:flex-start; padding:8px 0; border-bottom:1px solid var(--border); }
+    .food-item:last-child { border-bottom:none; }
+    .food-name { font-size:13px; color:var(--text); }
+    .food-amt { font-size:12px; color:var(--muted); }
+    .food-macros { display:flex; gap:8px; margin-top:2px; }
+    .food-macro { font-size:10px; color:var(--muted); }
+    .meal-check-btn { margin-top:10px; width:100%; padding:10px; border-radius:10px; border:1px solid var(--border); background:transparent; color:var(--muted); font-size:12px; font-weight:600; cursor:pointer; font-family:'DM Sans'; text-transform:uppercase; }
+    .meal-check-btn.done { border-color:#4dffa0; color:#4dffa0; }
+    .water-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px; margin-bottom:16px; }
+    .water-cups { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+    .water-cup { width:36px; height:36px; border-radius:8px; border:2px solid var(--border); background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px; }
+    .water-cup.filled { border-color:#4daaff; background:rgba(77,170,255,0.15); }
+    /* REWARDS */
+    .xp-container { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px; margin-bottom:16px; }
+    .xp-bar { height:8px; background:var(--border); border-radius:4px; overflow:hidden; margin:10px 0 6px; }
+    .xp-fill { height:100%; background:linear-gradient(90deg,var(--accent),#a0c020); border-radius:4px; transition:width 0.8s; }
+    .streak-card { background:linear-gradient(135deg,#1a1200,#110d00); border:1px solid rgba(245,197,24,0.3); border-radius:14px; padding:16px; margin-bottom:16px; display:flex; align-items:center; gap:16px; }
+    .badges-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+    .badge-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px; display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center; }
+    .badge-card.locked { opacity:0.4; filter:grayscale(1); }
+    .badge-card.unlocked { border-color:var(--gold); background:linear-gradient(135deg,#1a1500,#111); }
+    .body-progress { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px; margin-bottom:16px; }
+    .prog-item { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); }
+    .prog-item:last-child { border-bottom:none; }
+    .prog-input { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:6px 10px; color:var(--text); font-size:14px; font-family:'DM Sans'; width:80px; text-align:center; }
+    .prog-input:focus { outline:none; border-color:var(--accent); }
+    /* TOAST */
+    .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-80px); background:var(--accent); color:#000; padding:12px 20px; border-radius:12px; font-weight:700; font-size:14px; z-index:200; transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1); white-space:nowrap; max-width:90vw; text-align:center; }
+    .toast.show { transform:translateX(-50%) translateY(0); }
+    @keyframes slide-up { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+    .slide-up { animation:slide-up 0.3s ease forwards; }
+    @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(200,241,53,0.4)} 50%{box-shadow:0 0 0 12px rgba(200,241,53,0)} }
+    .pulse { animation:pulse 2s infinite; }
+    input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; }
+    input, button { -webkit-tap-highlight-color:transparent; }
+    textarea { -webkit-appearance:none; }
+    .profile-avatar { width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,var(--accent),#6a9000); display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue'; font-size:36px; color:#000; margin:0 auto 12px; border:3px solid var(--accent); }
+  </style>
+
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+// ─── ÍCONES SVG ───────────────────────────────────────────────────────────────
+const IcoHome = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>;
+const IcoDiet = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12h8M12 8v8"/></svg>;
+const IcoTrophy = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><polyline points="8 21 12 17 16 21"/><path d="M17 7H7a5 5 0 005 5 5 5 0 005-5z"/><path d="M5 7H2v4a4 4 0 004 4h1M19 7h3v4a4 4 0 01-4 4h-1"/><line x1="12" y1="17" x2="12" y2="21"/></svg>;
+const IcoUser = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>;
+const IcoBack = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><polyline points="15 18 9 12 15 6"/></svg>;
+const IcoArrow = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><polyline points="9 18 15 12 9 6"/></svg>;
+const IcoCheck = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}><polyline points="20 6 9 17 4 12"/></svg>;
+const IcoYT = ({size=18,color="#ff0000"}) => <svg viewBox="0 0 24 24" style={{width:size,height:size,fill:color,flexShrink:0}}><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>;
+
+// ─── STORAGE ─────────────────────────────────────────────────────────────────
+function useLS(key, init) {
+  const [v, setV] = useState(() => {
+    try { const s = localStorage.getItem(key); return s ? JSON.parse(s) : init; } catch { return init; }
+  });
+  const set = (val) => {
+    const next = typeof val === "function" ? val(v) : val;
+    setV(next);
+    try { localStorage.setItem(key, JSON.stringify(next)); } catch {}
+  };
+  return [v, set];
+}
+
+// ─── DADOS DOS TREINOS ────────────────────────────────────────────────────────
+const PROGRAM = {
+  schedule: ["rest","push","pull","legs","upper","lower","rest"],
+  workouts: {
+    push: {
+      id:"push", type:"push", name:"PUSH", label:"Treino A", color:"#ff4d4d",
+      exercises:[
+        {id:"p1",name:"Supino Reto Barra Olímpica",sets:"6x",reps:"—",note:"2x aquec • 2x prep • 2x válidas",tip:"Desça a barra controlada até tocar o peito. Empurre explosivo. Pés firmes no chão, arco lombar natural. Retraia as escápulas.",subs:["Supino com Halteres","Supino na Máquina","Crossover Polia Alta"],yt:"https://www.youtube.com/results?search_query=supino+reto+barra+execucao+musculacao"},
+        {id:"p2",name:"Crossover Polia Alta",sets:"4x",reps:"12",note:"progressão de carga",tip:"Incline levemente o tronco. Puxe em arco até as mãos se encontrarem na altura do abdômen. Sinta o alongamento máximo no peitoral.",subs:["Crucifixo Máquina","Fly com Halteres"],yt:"https://www.youtube.com/results?search_query=crossover+polia+alta+execucao"},
+        {id:"p3",name:"Supino Inclinado com Halter",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Banco a 30-45°. Desça os halteres até a altura do peito, cotovelos a 75°. Empurre controlado. Trabalha a parte superior do peitoral.",subs:["Supino Inclinado Barra","Crossover Polia Média"],yt:"https://www.youtube.com/results?search_query=supino+inclinado+halter+execucao"},
+        {id:"p4",name:"Elevação Lateral no Banco",sets:"4x",reps:"8-12",note:"progressão de carga • drop set na última",tip:"Banco a 45°. Faça a elevação lateral com cotovelo levemente flexionado. Não eleve além dos ombros. Drop set: reduza 30% na última.",subs:["Elevação Lateral Cabo","Elevação Lateral Livre"],yt:"https://www.youtube.com/results?search_query=elevacao+lateral+banco+inclinado+execucao"},
+        {id:"p5",name:"Elevação Frontal com Corda",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Mãos em neutro segurando a corda. Eleve até a altura dos ombros. Não balance o corpo. Movimento controlado.",subs:["Elevação Frontal Halter","Elevação Frontal Cabo"],yt:"https://www.youtube.com/results?search_query=elevacao+frontal+corda+polia+execucao"},
+        {id:"p6",name:"Bíceps na Polia Barra Reta",sets:"4x",reps:"8-12",note:"progressão de carga — costas pra polia",tip:"Fique de costas para a polia. Enrole os cotovelos mantendo-os fixos. Contração máxima no topo. Descida controlada.",subs:["Rosca Direta","Bíceps Máquina"],yt:"https://www.youtube.com/results?search_query=rosca+polia+barra+reta+costas+execucao"},
+        {id:"p7",name:"Bíceps Banco Scott Barra W",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Apoie os braços no banco Scott. Barra W reduz estresse no pulso. Descida lenta, contração explosiva.",subs:["Rosca Concentrada","Rosca Martelo"],yt:"https://www.youtube.com/results?search_query=rosca+scott+barra+W+execucao"},
+      ]
+    },
+    pull: {
+      id:"pull", type:"pull", name:"PULL", label:"Treino B", color:"#4dffa0",
+      exercises:[
+        {id:"b1",name:"Puxada Frente Pegada Aberta",sets:"5x",reps:"8-12",note:"1x aquec • 2-3x prep • drop set na última",tip:"Pegada pronada mais larga que os ombros. Puxe com as costas, não os braços. Barra ao queixo. Drop set na 5ª: reduza carga e vá até a falha.",subs:["Puxada Máquina","Remada Aberta"],yt:"https://www.youtube.com/results?search_query=puxada+frente+pegada+aberta+execucao"},
+        {id:"b2",name:"Remada Máquina Pegada Aberta",sets:"4x",reps:"8-12",note:"2x prep • 2x válidas",tip:"Assento alinhado com os puxadores. Puxe em direção ao abdômen retraindo as escápulas. Descida lenta e controlada.",subs:["Remada Articulada","Remada Curvada"],yt:"https://www.youtube.com/results?search_query=remada+maquina+pegada+aberta+execucao"},
+        {id:"b3",name:"Pulldown Crossover",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Puxe de cima para baixo com os braços levemente flexionados. Foco no latíssimo. Controle o retorno.",subs:["Pulldown Cabo","Straight-Arm Pulldown"],yt:"https://www.youtube.com/results?search_query=pulldown+crossover+costas+execucao"},
+        {id:"b4",name:"Puxada Triângulo",sets:"4x",reps:"8-12",note:"4x progressão de carga",tip:"Pegada neutra com triângulo. Puxe até o abdômen, cotovelos para trás. Ótimo para a parte média das costas.",subs:["Remada Triângulo","Remada Barra"],yt:"https://www.youtube.com/results?search_query=puxada+triangulo+pegada+neutra+execucao"},
+        {id:"b5",name:"Crucifixo Inverso Máquina",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Peito apoiado no banco. Abra os braços em arco para trás. Contraia os deltoides posteriores. Sem impulso.",subs:["Crucifixo Inverso Polia","Face Pull"],yt:"https://www.youtube.com/results?search_query=crucifixo+inverso+maquina+deltoide+posterior"},
+        {id:"b6",name:"Tríceps Máquina",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Cotovelos fixos. Estenda completamente. Contração máxima no final. Descida controlada.",subs:["Tríceps Polia","Tríceps Testa"],yt:"https://www.youtube.com/results?search_query=triceps+maquina+execucao"},
+        {id:"b7",name:"Tríceps Pulley",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Cotovelos ao lado do corpo. Estenda totalmente. Não abra os cotovelos durante o movimento.",subs:["Tríceps Máquina","Tríceps Mergulho"],yt:"https://www.youtube.com/results?search_query=triceps+pulley+polia+execucao"},
+        {id:"b8",name:"Tríceps Testa Barra W",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Deitado no banco. Baixe a barra W em direção à testa. Cotovelos fixos apontando para cima. Extensão total.",subs:["Tríceps Francês","Tríceps Polia"],yt:"https://www.youtube.com/results?search_query=triceps+testa+barra+W+execucao"},
+      ]
+    },
+    legs: {
+      id:"legs", type:"legs", name:"LEGS", label:"Treino C", color:"#c8f135",
+      exercises:[
+        {id:"l1",name:"Agachamento Livre ou Pêndulo",sets:"6x",reps:"8-12",note:"2x aquec • 2x prep • 2x válidas",tip:"Pés na largura dos ombros, levemente abertos. Desça até a coxa paralela ao chão. Joelhos alinhados. Subida explosiva, descida em 3 segundos.",subs:["Agachamento Smith","Leg Press 45°"],yt:"https://www.youtube.com/results?search_query=agachamento+livre+execucao+tecnica"},
+        {id:"l2",name:"Cadeira Extensora",sets:"4x",reps:"8-12",note:"sobe em 1s • desce em 3s",tip:"Rolo na altura do tornozelo. Estenda completamente. IMPORTANTE: sobe em 1 segundo, desce em 3 segundos — isso maximiza o ganho muscular.",subs:["Leg Extension Cabo","Hack Squat"],yt:"https://www.youtube.com/results?search_query=cadeira+extensora+execucao+quadriceps"},
+        {id:"l3",name:"Addutor Máquina",sets:"4x",reps:"15",note:"progressão de carga",tip:"Feche as pernas de forma controlada. Postura ereta. Trabalha a parte interna da coxa.",subs:["Addutor Cabo","Agachamento Sumô"],yt:"https://www.youtube.com/results?search_query=addutor+maquina+execucao"},
+        {id:"l4",name:"Mesa Flexora",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Deitado de bruços. Enrole os calcanhares em direção aos glúteos. Descida controlada. Foco nos isquiotibiais.",subs:["Flexora em Pé","Stiff"],yt:"https://www.youtube.com/results?search_query=mesa+flexora+execucao+isquiotibiais"},
+        {id:"l5",name:"Stiff Unilateral com Halter",sets:"3x",reps:"8-12",note:"progressão de carga",tip:"Perna levemente flexionada. Desça o halter pela perna com as costas retas. Sinta o alongamento nos isquiotibiais. Unilateral corrige assimetrias.",subs:["Stiff Barra","Mesa Flexora"],yt:"https://www.youtube.com/results?search_query=stiff+unilateral+halter+execucao"},
+        {id:"l6",name:"Panturrilha no Smith",sets:"6x",reps:"até a falha",note:"até a falha",tip:"Ponta dos pés na plataforma. Amplitude máxima: desce ao máximo, sobe ao máximo. 1 segundo no topo. Panturrilha é resistente — vá até a falha em todas as séries.",subs:["Panturrilha Máquina","Panturrilha Livre"],yt:"https://www.youtube.com/results?search_query=panturrilha+smith+execucao"},
+      ]
+    },
+    upper: {
+      id:"upper", type:"upper", name:"UPPER", label:"Treino D", color:"#6496ff",
+      exercises:[
+        {id:"u1",name:"Puxada Frente",sets:"4x",reps:"15",note:"1 aquec • 1 prep • 2 válidas — progressão de carga",tip:"Pegada pronada. Puxe com as costas, não os braços. Barra ao queixo. Controle o retorno.",subs:["Puxada Máquina","Remada"],yt:"https://www.youtube.com/results?search_query=puxada+frente+execucao+tecnica"},
+        {id:"u2",name:"Remada Máquina Pegada Aberta",sets:"4x",reps:"8-12",note:"",tip:"Retraia as escápulas. Puxe em direção ao abdômen. Descida lenta.",subs:["Remada Articulada","Remada Curvada"],yt:"https://www.youtube.com/results?search_query=remada+maquina+aberta+execucao"},
+        {id:"u3",name:"Crucifixo Máquina",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Amplitude completa. Contração máxima no final. Conexão mente-músculo no peitoral.",subs:["Crucifixo Cabo","Supino com Halteres"],yt:"https://www.youtube.com/results?search_query=crucifixo+maquina+peitoral+execucao"},
+        {id:"u4",name:"Crossover Polia Alta",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Incline o tronco. Arco no movimento. Mãos encontram na altura do abdômen.",subs:["Crucifixo Máquina","Fly Cabo"],yt:"https://www.youtube.com/results?search_query=crossover+polia+alta+peitoral+execucao"},
+        {id:"u5",name:"Desenvolvimento com Halter",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Sentado. Halteres na altura dos ombros. Empurre acima da cabeça sem travar os cotovelos.",subs:["Desenvolvimento Máquina","Elevação Lateral"],yt:"https://www.youtube.com/results?search_query=desenvolvimento+halter+ombro+execucao"},
+        {id:"u6",name:"Elevação Unilateral na Polia",sets:"4x",reps:"12",note:"",tip:"Unilateral para equilíbrio muscular. Cabo abaixo. Eleve até a altura do ombro. Controle total.",subs:["Elevação Lateral Halter","Face Pull"],yt:"https://www.youtube.com/results?search_query=elevacao+lateral+unilateral+polia+execucao"},
+        {id:"u7",name:"Bíceps Unilateral Banco Inclinado",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Banco a 45°. Braço pendurado. Enrole totalmente. Contração máxima no topo.",subs:["Rosca Direta","Rosca Scott"],yt:"https://www.youtube.com/results?search_query=rosca+unilateral+banco+inclinado+execucao"},
+        {id:"u8",name:"Tríceps Barra W na Polia",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Cotovelos fixos. Extensão total. Não abra os cotovelos.",subs:["Tríceps Máquina","Tríceps Corda"],yt:"https://www.youtube.com/results?search_query=triceps+barra+W+polia+execucao"},
+      ]
+    },
+    lower: {
+      id:"lower", type:"lower", name:"LOWER", label:"Treino E", color:"#ffaa00",
+      exercises:[
+        {id:"e1",name:"Mesa Flexora",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Deitado de bruços. Enrole os calcanhares. Descida controlada em 3 segundos. Foco nos isquiotibiais.",subs:["Stiff","Flexora em Pé"],yt:"https://www.youtube.com/results?search_query=mesa+flexora+execucao+isquiotibiais"},
+        {id:"e2",name:"Cadeira Flexora",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Sentado. Puxe para baixo. Controle a descida. Mantenha postura ereta.",subs:["Mesa Flexora","Stiff"],yt:"https://www.youtube.com/results?search_query=cadeira+flexora+sentado+execucao"},
+        {id:"e3",name:"Búlgaro (Agachamento Búlgaro)",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Pé traseiro apoiado no banco. Desça até a coxa dianteira paralela ao chão. Ótimo para glúteos e quadríceps.",subs:["Agachamento Livre","Leg Press"],yt:"https://www.youtube.com/results?search_query=agachamento+bulgaro+execucao+tecnica"},
+        {id:"e4",name:"Hack Squat",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Pés na largura dos ombros. Desça controlado. Joelhos alinhados. Não trave os joelhos no topo.",subs:["Leg Press","Agachamento Smith"],yt:"https://www.youtube.com/results?search_query=hack+squat+execucao+quadriceps"},
+        {id:"e5",name:"Cadeira Extensora",sets:"4x",reps:"8-12",note:"progressão de carga",tip:"Extensão completa. Descida em 3 segundos. Máximo estímulo no quadríceps.",subs:["Agachamento","Leg Press"],yt:"https://www.youtube.com/results?search_query=cadeira+extensora+execucao"},
+        {id:"e6",name:"Panturrilha no Smith",sets:"6x",reps:"até a falha",note:"até a falha",tip:"Amplitude máxima. 1 segundo no topo. Vai até a falha em todas as séries.",subs:["Panturrilha Máquina","Panturrilha Livre"],yt:"https://www.youtube.com/results?search_query=panturrilha+smith+execucao"},
+      ]
+    }
+  }
+};
+
+const DIET = {
+  kcal:2800, protein:180, carbs:310, fat:80, water:3.5,
+  meals:[
+    {id:"m1",time:"07:30",name:"Café da manhã",kcal:520,foods:[
+      {name:"Ovos inteiros cozidos",amount:"3 unid",p:18,c:2,f:15},
+      {name:"Aveia com leite semidesnatado",amount:"60g + 200ml",p:12,c:48,f:7},
+      {name:"Banana",amount:"1 média (120g)",p:1,c:27,f:0},
+      {name:"Whey Protein",amount:"30g",p:24,c:3,f:1},
+    ]},
+    {id:"m2",time:"10:00",name:"Lanche da manhã",kcal:320,foods:[
+      {name:"Iogurte grego sem açúcar",amount:"170g",p:17,c:8,f:5},
+      {name:"Granola low carb",amount:"30g",p:4,c:18,f:6},
+      {name:"Castanha-do-pará",amount:"20g (3 unid)",p:3,c:1,f:13},
+    ]},
+    {id:"m3",time:"12:50",name:"Almoço (Moresi)",kcal:720,foods:[
+      {name:"Arroz branco cozido",amount:"150g",p:4,c:44,f:0},
+      {name:"Feijão carioca",amount:"100g cozido",p:7,c:22,f:1},
+      {name:"Frango grelhado",amount:"200g",p:48,c:0,f:5},
+      {name:"Salada (folhas + tomate)",amount:"livre",p:2,c:5,f:0},
+      {name:"Azeite de oliva",amount:"1 col sopa",p:0,c:0,f:14},
+    ]},
+    {id:"m4",time:"16:00",name:"Lanche da tarde",kcal:380,foods:[
+      {name:"Pão integral",amount:"2 fatias (60g)",p:7,c:30,f:3},
+      {name:"Pasta de amendoim integral",amount:"30g",p:8,c:6,f:9},
+      {name:"Whey Protein",amount:"30g",p:24,c:3,f:1},
+    ]},
+    {id:"m5",time:"21:00",name:"Pré-treino (≈22h)",kcal:420,foods:[
+      {name:"Batata doce assada",amount:"200g",p:4,c:50,f:0},
+      {name:"Frango grelhado",amount:"150g",p:36,c:0,f:4},
+      {name:"Brócolis cozido",amount:"100g",p:3,c:5,f:0},
+    ]},
+    {id:"m6",time:"01:00",name:"Pós-treino / antes de dormir",kcal:440,foods:[
+      {name:"Whey Protein",amount:"40g",p:32,c:4,f:1},
+      {name:"Ovo cozido",amount:"2 unid",p:12,c:1,f:10},
+      {name:"Caseína ou queijo cottage",amount:"150g",p:18,c:4,f:4},
+      {name:"Banana pequena",amount:"1 (80g)",p:1,c:18,f:0},
+    ]},
+  ]
+};
+
+const WEEK_DAYS = ["D","S","T","Q","Q","S","S"];
+const WEEK_NAMES = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+
+const BADGES = [
+  {id:"first",icon:"🏋️",name:"Primeira Rep",desc:"Complete seu 1º treino",check:w=>w>=1},
+  {id:"ten",icon:"💪",name:"10x Guerreiro",desc:"Complete 10 treinos",check:w=>w>=10},
+  {id:"week",icon:"🔥",name:"Semana em Chamas",desc:"7 dias de streak",check:(w,s)=>s>=7},
+  {id:"month",icon:"🏆",name:"Campeão do Mês",desc:"30 dias de streak",check:(w,s)=>s>=30},
+  {id:"shape",icon:"🎯",name:"Shape Agosto",desc:"Meta de agosto atingida!",check:()=>false},
+  {id:"100",icon:"⚡",name:"Centurião",desc:"100 treinos concluídos",check:w=>w>=100},
+];
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function Toast({msg,show}) {
+  return <div className={`toast${show?" show":""}`}>{msg}</div>;
+}
+
+// ─── EXERCISE DETAIL ─────────────────────────────────────────────────────────
+function ExerciseDetail({exercise, workoutId, onBack}) {
+  const [tab, setTab] = useState("log");
+  const key = `log_${workoutId}_${exercise.id}`;
+  const [logs, setLogs] = useLS(key, []);
+  const [sets, setSets] = useState([{reps:"",kg:""},{reps:"",kg:""},{reps:"",kg:""}]);
+  const [note, setNote] = useState("");
+  const [toast, setToast] = useState({show:false,msg:""});
+
+  const toast2 = (msg) => { setToast({show:true,msg}); setTimeout(()=>setToast({show:false,msg:""}),2500); };
+  const addSet = () => setSets(s=>[...s,{reps:"",kg:""}]);
+  const rmSet = (i) => setSets(s=>s.filter((_,j)=>j!==i));
+  const updSet = (i,f,v) => setSets(s=>s.map((x,j)=>j===i?{...x,[f]:v}:x));
+
+  const save = () => {
+    const valid = sets.filter(s=>s.reps||s.kg);
+    if(!valid.length&&!note){toast2("⚠️ Preencha ao menos uma série");return;}
+    setLogs(l=>[{date:new Date().toLocaleString("pt-BR"),sets:valid,note,ts:Date.now()},...l]);
+    setSets([{reps:"",kg:""},{reps:"",kg:""},{reps:"",kg:""}]);
+    setNote("");
+    toast2("✅ Progressão salva!");
+  };
+
+  const lastLog = logs[0];
+  const emoji = exercise.type==="legs"||exercise.type==="lower"?"🦵":exercise.type==="pull"?"💪":"🏋️";
+
+  return (
+    <div className="ex-detail slide-up">
+      <Toast msg={toast.msg} show={toast.show}/>
+      <button className="back-btn" onClick={onBack}><IcoBack/></button>
+      <div className="ex-hero">
+        <span style={{fontSize:80,position:"relative",zIndex:1}}>{emoji}</span>
+      </div>
+      <div className="ex-body">
+        <div className="ex-title">{exercise.name}</div>
+        <div className="badge-row">
+          <span className="sbadge a">{exercise.sets} séries</span>
+          <span className="sbadge">{exercise.reps} reps</span>
+          {exercise.note&&<span className="sbadge">{exercise.note}</span>}
+          {lastLog&&<span className="sbadge g">Último: {lastLog.sets[0]?.kg?lastLog.sets[0].kg+"kg":"—"}</span>}
+        </div>
+
+        <div className="tip-box">{exercise.tip}</div>
+
+        {/* BOTÃO YOUTUBE - exercício principal */}
+        {exercise.yt&&(
+          <a className="yt-btn" href={exercise.yt} target="_blank" rel="noopener noreferrer">
+            <div className="yt-icon"><IcoYT size={18} color="#ff0000"/></div>
+            Ver execução no YouTube
+          </a>
+        )}
+
+        <div className="action-row">
+          <button className={`action-btn${tab==="log"?" active":""}`} onClick={()=>setTab("log")}>✏️<span>Registrar</span></button>
+          <button className={`action-btn${tab==="subs"?" active":""}`} onClick={()=>setTab("subs")}>🔄<span>Substituir</span></button>
+          <button className={`action-btn${tab==="hist"?" active":""}`} onClick={()=>setTab("hist")}>📊<span>Histórico</span></button>
+        </div>
+
+        {tab==="log"&&(
+          <div className="log-section slide-up">
+            <div className="log-title">Registrar séries</div>
+            {sets.map((s,i)=>(
+              <div className="set-row" key={i}>
+                <span className="set-label">S{i+1}</span>
+                <input className="set-input" type="number" placeholder="Reps" value={s.reps} onChange={e=>updSet(i,"reps",e.target.value)} inputMode="numeric"/>
+                <span className="set-unit" style={{textAlign:"center"}}>×</span>
+                <input className="set-input" type="number" placeholder="Kg" value={s.kg} onChange={e=>updSet(i,"kg",e.target.value)} inputMode="decimal"/>
+                <span className="set-unit">kg</span>
+                {sets.length>1&&<button onClick={()=>rmSet(i)} style={{background:"none",border:"none",color:"var(--muted)",cursor:"pointer",fontSize:18}}>×</button>}
+              </div>
+            ))}
+            <button className="add-set-btn" onClick={addSet}>+ Adicionar série</button>
+            <div style={{marginTop:12}}>
+              <div className="log-title">Anotação livre</div>
+              <textarea value={note} onChange={e=>setNote(e.target.value)} placeholder="Ex: boa execução, aumentar carga na próxima..." style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:10,padding:"10px 12px",color:"var(--text)",fontSize:13,fontFamily:"DM Sans",resize:"none",height:80,marginBottom:12}}/>
+            </div>
+            <button className="save-btn" onClick={save}>💾 Salvar progressão</button>
+          </div>
+        )}
+
+        {tab==="subs"&&(
+          <div className="slide-up">
+            <div className="log-title" style={{marginBottom:12}}>Exercícios substitutos</div>
+            {(exercise.subs||[]).map((sub,i)=>{
+              const ytUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(sub+" execução musculação")}`;
+              return (
+                <div key={i} className="sub-card">
+                  <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
+                    <span style={{fontSize:20}}>🔄</span>
+                    <span style={{fontSize:14,fontWeight:600,color:"var(--text)"}}>{sub}</span>
+                  </div>
+                  {/* BOTÃO YOUTUBE - exercício substituto */}
+                  <a className="sub-yt" href={ytUrl} target="_blank" rel="noopener noreferrer">
+                    <IcoYT size={16} color="#ff4444"/>
+                    Ver execução no YouTube
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {tab==="hist"&&(
+          <div className="slide-up">
+            <div className="log-title" style={{marginBottom:12}}>Histórico de cargas</div>
+            {logs.length===0
+              ?<div style={{textAlign:"center",color:"var(--muted)",padding:"30px 0",fontSize:14}}>Nenhum registro ainda.<br/>Comece a registrar suas séries! 💪</div>
+              :logs.map((log,i)=>(
+                <div key={i} className="hist-item">
+                  <div className="hist-date">{log.date}</div>
+                  {log.sets.map((s,j)=>(
+                    <div key={j} style={{fontSize:13,color:"var(--text)"}}>
+                      Série {j+1}: <strong style={{color:"var(--accent)"}}>{s.reps||"?"}x {s.kg||"?"}kg</strong>
+                    </div>
+                  ))}
+                  {log.note&&<div style={{color:"var(--muted)",fontSize:12,marginTop:4,fontStyle:"italic"}}>📝 {log.note}</div>}
+                </div>
+              ))
+            }
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── WORKOUT VIEW ─────────────────────────────────────────────────────────────
+function WorkoutView({workout, onBack, onFinish}) {
+  const [done, setDone] = useLS(`done_${workout.id}`, []);
+  const [selEx, setSelEx] = useState(null);
+  const [toast, setToast] = useState({show:false,msg:""});
+
+  const toast2 = (msg) => { setToast({show:true,msg}); setTimeout(()=>setToast({show:false,msg:""}),2500); };
+  const toggle = (id,e) => { e.stopPropagation(); setDone(p=>p.includes(id)?p.filter(x=>x!==id):[...p,id]); };
+  const progress = done.length/workout.exercises.length;
+
+  const colors = {push:"#ff4d4d",pull:"#4dffa0",legs:"#c8f135",upper:"#6496ff",lower:"#ffaa00"};
+
+  if(selEx) return (
+    <div className="wview">
+      <ExerciseDetail exercise={{...selEx,type:workout.type}} workoutId={workout.id} onBack={()=>setSelEx(null)}/>
+    </div>
+  );
+
+  return (
+    <div className="wview slide-up">
+      <Toast msg={toast.msg} show={toast.show}/>
+      <div className="wview-hero">
+        <button className="back-btn" style={{position:"relative",top:"auto",left:"auto",marginBottom:16}} onClick={onBack}><IcoBack/></button>
+        <div className="wview-type">{workout.label}</div>
+        <div className="wview-name" style={{color:colors[workout.type]||"var(--accent)"}}>{workout.name}</div>
+        <div className="wview-meta">{workout.exercises.length} exercícios • {done.length} concluídos</div>
+        <div className="prog-bar"><div className="prog-fill" style={{width:`${progress*100}%`}}/></div>
+      </div>
+
+      <div style={{padding:"16px 20px 0"}}>
+        {workout.exercises.map((ex,i)=>{
+          let hasData=false;
+          try{const d=localStorage.getItem(`log_${workout.id}_${ex.id}`);hasData=d&&JSON.parse(d).length>0;}catch{}
+          const isDone=done.includes(ex.id);
+          return (
+            <div key={ex.id} className="ex-item" style={isDone?{opacity:0.6}:{}} onClick={()=>setSelEx(ex)}>
+              <span className="ex-num">{String(i+1).padStart(2,"0")}</span>
+              <div className="ex-info">
+                <div className="ex-name" style={isDone?{textDecoration:"line-through"}:{}}>{ex.name}</div>
+                <div className="ex-meta">{ex.sets} séries • {ex.reps} reps</div>
+                <div style={{display:"flex",alignItems:"center",gap:4,marginTop:2}}>
+                  <div style={{width:6,height:6,borderRadius:"50%",background:hasData?"var(--accent)":"var(--border)"}}/>
+                  <span style={{fontSize:10,color:"var(--muted)"}}>{hasData?"Carga registrada":"Sem registro"}</span>
+                </div>
+              </div>
+              <div className={`ex-check${isDone?" done":""}`} onClick={e=>toggle(ex.id,e)}>
+                {isDone&&<IcoCheck/>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <button
+        className={`finish-btn${progress>=0.99?" pulse":""}`}
+        style={{background:progress>=0.99?"linear-gradient(135deg,var(--accent),#a0c020)":"var(--surface)",color:progress>=0.99?"#000":"var(--muted)",border:progress>=0.99?"none":"1px solid var(--border)"}}
+        onClick={()=>onFinish(workout)}
+      >
+        {progress>=0.99?"🏆 Finalizar Treino":`Encerrar (${Math.round(progress*100)}% completo)`}
+      </button>
+    </div>
+  );
+}
+
+// ─── HOME TAB ─────────────────────────────────────────────────────────────────
+function HomeTab({onStart}) {
+  const today = new Date();
+  const todayIdx = today.getDay();
+  const [selDay, setSelDay] = useState(todayIdx);
+
+  const weekDates = Array.from({length:7},(_,i)=>{
+    const d=new Date(today); d.setDate(today.getDate()-todayIdx+i); return d.getDate();
+  });
+
+  const sched = PROGRAM.schedule;
+  const selWId = sched[selDay];
+  const selW = selWId!=="rest"?PROGRAM.workouts[selWId]:null;
+  const todayW = sched[todayIdx]!=="rest"?PROGRAM.workouts[sched[todayIdx]]:null;
+  const colors = {push:"#ff4d4d",pull:"#4dffa0",legs:"#c8f135",upper:"#6496ff",lower:"#ffaa00"};
+  const icons = {push:"💥",pull:"🎯",legs:"🦵",upper:"💪",lower:"⚡"};
+  const aug = new Date(2026,7,1);
+  const daysLeft = Math.ceil((aug-today)/86400000);
+
+  return <>
+    <div className="hero">
+      <div className="hero-greeting">// BOA NOITE</div>
+      <div className="hero-name">HELLDER</div>
+      <div className="hero-sub">A cada dia mais perto do shape de agosto 💪</div>
+    </div>
+
+    <div className="stats-bar">
+      <div className="stat-pill"><div className="stat-val">{daysLeft}</div><div className="stat-lbl">Dias p/ agosto</div></div>
+      <div className="stat-pill"><div className="stat-val" style={{color:"#ff6464"}}>78</div><div className="stat-lbl">Peso kg</div></div>
+      <div className="stat-pill"><div className="stat-val" style={{color:"#4dffa0"}}>1.73</div><div className="stat-lbl">Altura</div></div>
+    </div>
+
+    <div className="week-bar">
+      <div className="week-label">Maio de 2026</div>
+      <div className="week-days">
+        {WEEK_DAYS.map((d,i)=>{
+          const wid=sched[i];
+          return (
+            <button key={i} className={`day-btn${i===todayIdx?" today":""}${selDay===i?" sel":""}${wid!=="rest"?" has-w":" rest"}`} onClick={()=>setSelDay(i)}>
+              <span className="dn">{d}</span>
+              <span className="dd">{weekDates[i]}</span>
+              <span className="dot"/>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+
+    {selDay===todayIdx&&todayW&&(
+      <div className="today-wcard" onClick={()=>onStart(todayW)}>
+        <div className="today-tag">▶ TREINO DE HOJE</div>
+        <div className="today-wname" style={{color:colors[todayW.type]}}>{todayW.name}</div>
+        <div className="today-wsub">{todayW.label} • {todayW.exercises.length} exercícios</div>
+        <button className="start-btn">▶ INICIAR TREINO</button>
+      </div>
+    )}
+
+    <div className="section">
+      <div className="section-title">{selDay===todayIdx?"Todos os treinos":"Treino de "+WEEK_NAMES[selDay]}</div>
+
+      {selW?(
+        <div className="wcard" onClick={()=>onStart(selW)}>
+          <div className="wcard-hdr">
+            <div className={`wicon ${selW.type}`}>{icons[selW.type]}</div>
+            <div>
+              <span className={`tbadge ${selW.type}`}>{selW.label}</span>
+              <div className="wcard-name">{selW.name}</div>
+              <div className="wcard-meta">{selW.exercises.length} exercícios</div>
+            </div>
+            <div style={{marginLeft:"auto",color:"var(--muted)"}}><IcoArrow/></div>
+          </div>
+        </div>
+      ):(
+        <div className="rest-card">
+          <div style={{fontSize:32,marginBottom:8}}>😴</div>
+          <div style={{fontFamily:"Bebas Neue",fontSize:24,color:"var(--muted)",letterSpacing:1}}>DIA DE DESCANSO</div>
+          <div style={{fontSize:13,color:"var(--muted)",marginTop:4}}>Aproveite para recuperar. Pode fazer uma caminhada leve ou alongamento.</div>
+        </div>
+      )}
+
+      {selDay===todayIdx&&<>
+        <div className="section-title" style={{marginTop:20}}>Todos os treinos</div>
+        {Object.values(PROGRAM.workouts).map(w=>(
+          <div key={w.id} className="wcard" onClick={()=>onStart(w)}>
+            <div className="wcard-hdr">
+              <div className={`wicon ${w.type}`}>{icons[w.type]}</div>
+              <div>
+                <span className={`tbadge ${w.type}`}>{w.label}</span>
+                <div className="wcard-name">{w.name}</div>
+                <div className="wcard-meta">{w.exercises.length} exercícios</div>
+              </div>
+              <div style={{marginLeft:"auto",color:"var(--muted)"}}><IcoArrow/></div>
+            </div>
+          </div>
+        ))}
+      </>}
+    </div>
+  </>;
+}
+
+// ─── DIET TAB ─────────────────────────────────────────────────────────────────
+function DietTab() {
+  const [done, setDone] = useLS("meals_done",[]);
+  const [water, setWater] = useLS("water_cups",0);
+  const [open, setOpen] = useState(null);
+
+  const total14 = 14;
+  const doneKcal = DIET.meals.filter(m=>done.includes(m.id)).reduce((a,m)=>a+m.kcal,0);
+  const pct = Math.round((doneKcal/DIET.kcal)*100);
+
+  return <>
+    <div style={{padding:"20px 20px 0"}}>
+      <div style={{fontFamily:"Bebas Neue",fontSize:32,letterSpacing:2}}>DIETA</div>
+      <div style={{fontSize:13,color:"var(--muted)",marginBottom:16}}>Protocolo de ganho de massa + definição</div>
+    </div>
+    <div style={{padding:"0 20px"}}>
+      <div className="macro-grid">
+        <div className="macro-card">
+          <div className="macro-val">{DIET.kcal}</div><div className="macro-lbl">Kcal/dia</div>
+          <div className="macro-sub">{doneKcal} consumidas ({pct}%)</div>
+          <div className="macro-bar"><div className="macro-fill" style={{width:`${Math.min(pct,100)}%`,background:"var(--accent)"}}/></div>
+        </div>
+        <div className="macro-card">
+          <div className="macro-val" style={{color:"#ff6464"}}>{DIET.protein}g</div><div className="macro-lbl">Proteína</div>
+          <div className="macro-sub">{(DIET.protein/78).toFixed(1)}g/kg corpo</div>
+          <div className="macro-bar"><div className="macro-fill" style={{width:"75%",background:"#ff6464"}}/></div>
+        </div>
+        <div className="macro-card">
+          <div className="macro-val" style={{color:"#4daaff"}}>{DIET.carbs}g</div><div className="macro-lbl">Carboidratos</div>
+          <div className="macro-sub">Energia para treinos</div>
+          <div className="macro-bar"><div className="macro-fill" style={{width:"70%",background:"#4daaff"}}/></div>
+        </div>
+        <div className="macro-card">
+          <div className="macro-val" style={{color:"#ffaa00"}}>{DIET.fat}g</div><div className="macro-lbl">Gordura</div>
+          <div className="macro-sub">Gorduras boas</div>
+          <div className="macro-bar"><div className="macro-fill" style={{width:"40%",background:"#ffaa00"}}/></div>
+        </div>
+      </div>
+
+      <div className="water-card">
+        <div className="log-title">Hidratação — {(water*0.25).toFixed(2)}L de {DIET.water}L</div>
+        <div className="water-cups">
+          {Array.from({length:total14},(_,i)=>(
+            <button key={i} className={`water-cup${i<water?" filled":""}`} onClick={()=>setWater(i<water?i:i+1)}>
+              {i<water?"💧":"🫙"}
+            </button>
+          ))}
+        </div>
+        <div style={{fontSize:12,color:"var(--muted)"}}>{total14-water} copos restantes para bater a meta</div>
+      </div>
+
+      <div className="section-title">Refeições do dia</div>
+      {DIET.meals.map(meal=>{
+        const isDone=done.includes(meal.id);
+        const isOpen=open===meal.id;
+        return (
+          <div key={meal.id} className="meal-card" style={isDone?{opacity:0.7}:{}}>
+            <div className="meal-hdr" onClick={()=>setOpen(isOpen?null:meal.id)}>
+              <div>
+                <div className="meal-time">{meal.time}</div>
+                <div className="meal-name" style={isDone?{textDecoration:"line-through"}:{}}>{meal.name}</div>
+              </div>
+              <div className="meal-kcal">{meal.kcal} kcal</div>
+              <div style={{marginLeft:8,fontSize:18}}>{isDone?"✅":"○"}</div>
+            </div>
+            {isOpen&&(
+              <div className="meal-body slide-up">
+                {meal.foods.map((f,i)=>(
+                  <div key={i} className="food-item">
+                    <div>
+                      <div className="food-name">{f.name}</div>
+                      <div className="food-macros">
+                        <span className="food-macro">P:<strong style={{color:"var(--text)"}}>{f.p}g</strong></span>
+                        <span className="food-macro">C:<strong style={{color:"var(--text)"}}>{f.c}g</strong></span>
+                        <span className="food-macro">G:<strong style={{color:"var(--text)"}}>{f.f}g</strong></span>
+                      </div>
+                    </div>
+                    <div className="food-amt">{f.amount}</div>
+                  </div>
+                ))}
+                <button className={`meal-check-btn${isDone?" done":""}`} onClick={()=>setDone(p=>p.includes(meal.id)?p.filter(x=>x!==meal.id):[...p,meal.id])}>
+                  {isDone?"✅ Refeição concluída":"Marcar como concluída"}
+                </button>
+              </div>
+            )}
+          </div>
+        );
+      })}
+      <div style={{height:20}}/>
+    </div>
+  </>;
+}
+
+// ─── REWARDS TAB ─────────────────────────────────────────────────────────────
+function RewardsTab() {
+  const [total] = useLS("total_workouts",0);
+  const [streak] = useLS("streak",0);
+  const [stats, setStats] = useLS("body_stats",{weight:"78",waist:"",chest:"",arm:""});
+  const [saved, setSaved] = useState(false);
+
+  const xp = total*100+streak*50;
+  const level = Math.floor(xp/500)+1;
+  const levelXp = xp%500;
+
+  return <>
+    <div style={{padding:"20px 20px 0"}}>
+      <div style={{fontFamily:"Bebas Neue",fontSize:32,letterSpacing:2}}>CONQUISTAS</div>
+      <div style={{fontSize:13,color:"var(--muted)",marginBottom:16}}>Seu progresso rumo ao shape</div>
+    </div>
+    <div style={{padding:"0 20px"}}>
+      <div className="xp-container">
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div>
+            <div style={{fontSize:11,color:"var(--muted)",fontFamily:"Space Mono",textTransform:"uppercase",letterSpacing:1}}>Nível</div>
+            <div style={{fontFamily:"Bebas Neue",fontSize:32,color:"var(--accent)",lineHeight:1}}>LVL {level}</div>
+          </div>
+          <div style={{textAlign:"right"}}>
+            <div style={{fontSize:11,color:"var(--muted)",fontFamily:"Space Mono"}}>{xp} XP total</div>
+            <div style={{fontSize:13,fontWeight:600}}>{total} treinos</div>
+          </div>
+        </div>
+        <div className="xp-bar"><div className="xp-fill" style={{width:`${(levelXp/500)*100}%`}}/></div>
+        <div style={{fontSize:11,color:"var(--muted)",textAlign:"right",fontFamily:"Space Mono"}}>{500-levelXp} XP para Nível {level+1}</div>
+      </div>
+
+      <div className="streak-card">
+        <div style={{fontSize:40}}>🔥</div>
+        <div>
+          <div style={{fontFamily:"Bebas Neue",fontSize:48,color:"var(--gold)",lineHeight:1}}>{streak}</div>
+          <div style={{fontSize:12,color:"#a08000",textTransform:"uppercase",letterSpacing:1,fontWeight:600}}>dias de streak</div>
+        </div>
+        <div style={{marginLeft:"auto",textAlign:"right"}}>
+          <div style={{fontSize:11,color:"#a08000",fontFamily:"Space Mono"}}>Total treinos</div>
+          <div style={{fontFamily:"Bebas Neue",fontSize:28,color:"var(--gold)"}}>{total}</div>
+        </div>
+      </div>
+
+      <div className="section-title">Conquistas</div>
+      <div className="badges-grid">
+        {BADGES.map(b=>{
+          const unlocked=b.check(total,streak);
+          return (
+            <div key={b.id} className={`badge-card${unlocked?" unlocked":" locked"}`}>
+              <div style={{fontSize:32}}>{b.icon}</div>
+              <div style={{fontSize:12,fontWeight:700}}>{b.name}</div>
+              <div style={{fontSize:10,color:"var(--muted)"}}>{b.desc}</div>
+              {unlocked&&<div style={{fontSize:10,color:"var(--gold)",fontWeight:700}}>✨ DESBLOQUEADO</div>}
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="section-title">Medidas corporais</div>
+      <div className="body-progress">
+        {[["Peso","weight","kg"],["Cintura","waist","cm"],["Peito","chest","cm"],["Braço","arm","cm"]].map(([label,key,unit])=>(
+          <div key={key} className="prog-item">
+            <span style={{fontSize:13,color:"var(--muted)"}}>{label}</span>
+            <div style={{display:"flex",alignItems:"center",gap:6}}>
+              <input className="prog-input" type="number" value={stats[key]} onChange={e=>setStats(p=>({...p,[key]:e.target.value}))} inputMode="decimal" placeholder="—"/>
+              <span style={{fontSize:12,color:"var(--muted)",width:30}}>{unit}</span>
+            </div>
+          </div>
+        ))}
+        <button className="save-btn" style={{marginTop:12}} onClick={()=>{setSaved(true);setTimeout(()=>setSaved(false),2000);}}>
+          {saved?"✅ Salvo!":"Salvar medidas"}
+        </button>
+      </div>
+
+      <div style={{background:"linear-gradient(135deg,#0a1400,#080808)",border:"1px solid rgba(200,241,53,0.2)",borderRadius:14,padding:16,marginBottom:20,textAlign:"center"}}>
+        <div style={{fontSize:11,color:"var(--accent)",fontFamily:"Space Mono",letterSpacing:2,textTransform:"uppercase",marginBottom:6}}>Meta Principal</div>
+        <div style={{fontFamily:"Bebas Neue",fontSize:28}}>🎯 SHAPE AGOSTO 2026</div>
+        <div style={{fontSize:13,color:"var(--muted)",marginTop:4}}>Continue assim. Você vai chegar lá.</div>
+      </div>
+    </div>
+  </>;
+}
+
+// ─── PROFILE TAB ─────────────────────────────────────────────────────────────
+function ProfileTab() {
+  const [total] = useLS("total_workouts",0);
+  const imc = (78/(1.73*1.73)).toFixed(1);
+
+  return <>
+    <div style={{padding:"30px 20px 20px",textAlign:"center"}}>
+      <div className="profile-avatar">H</div>
+      <div style={{fontFamily:"Bebas Neue",fontSize:28,letterSpacing:2}}>HELLDER</div>
+      <div style={{fontSize:13,color:"var(--muted)"}}>78kg • 1,73m • 24 anos • Goal: Shape agosto 💪</div>
+    </div>
+    <div style={{padding:"0 20px"}}>
+      <div className="section-title">Programa ativo</div>
+      <div style={{background:"linear-gradient(135deg,#1a1f0a,#111)",border:"1px solid rgba(200,241,53,0.3)",borderRadius:16,padding:16,marginBottom:16}}>
+        <div style={{fontFamily:"Bebas Neue",fontSize:22,color:"var(--accent)",letterSpacing:1}}>PUSH · PULL · LEGS · UPPER · LOWER</div>
+        <div style={{fontSize:12,color:"var(--muted)",marginTop:4}}>5 treinos por semana • Seg→Sex • Descanso Sáb+Dom</div>
+        <div style={{display:"flex",gap:4,marginTop:10,flexWrap:"wrap"}}>
+          {["Dom:—","Seg:A Push","Ter:B Pull","Qua:C Legs","Qui:D Upper","Sex:E Lower","Sáb:—"].map((d,i)=>(
+            <span key={i} style={{fontSize:10,padding:"2px 8px",borderRadius:6,fontWeight:600,background:d.includes("—")?"var(--surface3)":"rgba(200,241,53,0.12)",color:d.includes("—")?"var(--muted)":"var(--accent)"}}>{d}</span>
+          ))}
+        </div>
+      </div>
+
+      <div className="section-title">Resumo</div>
+      <div className="macro-grid" style={{marginBottom:20}}>
+        {[["Treinos",total,"concluídos"],["IMC",imc,"kg/m²"],["Meta","Shape","ago/26"],["Nível",`LVL ${Math.floor((total*100)/500)+1}`,"XP"]].map(([l,v,s])=>(
+          <div key={l} className="macro-card">
+            <div className="macro-val" style={{fontSize:22}}>{v}</div>
+            <div className="macro-lbl">{l}</div>
+            <div className="macro-sub">{s}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </>;
+}
+
+// ─── APP PRINCIPAL ────────────────────────────────────────────────────────────
+function App() {
+  const [tab, setTab] = useState("home");
+  const [activeW, setActiveW] = useState(null);
+  const [toast, setToast] = useState({show:false,msg:""});
+  const [total, setTotal] = useLS("total_workouts",0);
+  const [streak, setStreak] = useLS("streak",0);
+  const [lastDate, setLastDate] = useLS("last_date",null);
+
+  const toast2 = (msg) => { setToast({show:true,msg}); setTimeout(()=>setToast({show:false,msg:""}),3000); };
+
+  const finish = (w) => {
+    const today = new Date().toDateString();
+    setTotal(n=>n+1);
+    if(lastDate!==today){
+      const yest=new Date(); yest.setDate(yest.getDate()-1);
+      setStreak(s=>lastDate===yest.toDateString()?s+1:1);
+      setLastDate(today);
+    }
+    setActiveW(null);
+    toast2(`🏆 +100 XP — Treino ${w.name} concluído!`);
+  };
+
+  const tabs = [
+    {id:"home",icon:<IcoHome/>,label:"Início"},
+    {id:"diet",icon:<IcoDiet/>,label:"Dieta"},
+    {id:"rewards",icon:<IcoTrophy/>,label:"Conquistas"},
+    {id:"profile",icon:<IcoUser/>,label:"Perfil"},
+  ];
+
+  return (
+    <div className="app">
+      <Toast msg={toast.msg} show={toast.show}/>
+
+      {activeW&&(
+        <div className="wview">
+          <WorkoutView workout={activeW} onBack={()=>setActiveW(null)} onFinish={finish}/>
+        </div>
+      )}
+
+      <div className="scroll">
+        {tab==="home"&&<HomeTab onStart={setActiveW}/>}
+        {tab==="diet"&&<DietTab/>}
+        {tab==="rewards"&&<RewardsTab/>}
+        {tab==="profile"&&<ProfileTab/>}
+      </div>
+
+      <nav className="nav">
+        {tabs.map(t=>(
+          <button key={t.id} className={`nav-btn${tab===t.id?" active":""}`} onClick={()=>setTab(t.id)}>
+            {t.icon}{t.label}
+          </button>
+        ))}
+      </nav>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+
+</body>
+</html>
