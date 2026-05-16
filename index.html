@@ -17,41 +17,28 @@
 html,body{height:100%;background:#000}
 body{color:var(--tx);font-family:'DM Sans',sans-serif;overflow:hidden;height:100dvh}
 #root{height:100dvh;position:relative;max-width:430px;margin:0 auto;overflow:hidden;background:var(--bg)}
-/* SCREENS */
 .screen{position:absolute;inset:0;background:var(--bg);display:flex;flex-direction:column;z-index:1}
-.screen.wk{z-index:10}
-.screen.ex{z-index:20}
-/* SCROLL */
-.pg{overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
-.pg::-webkit-scrollbar{width:0}
-/* NAV */
+.screen.wk{z-index:10}.screen.ex{z-index:20}.screen.tabata{z-index:30}
+.pg{overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}.pg::-webkit-scrollbar{width:0}
 .nav{flex-shrink:0;background:rgba(6,6,6,.97);backdrop-filter:blur(24px);border-top:1px solid var(--br);display:flex;padding-bottom:env(safe-area-inset-bottom)}
 .nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0 11px;font-size:9px;font-family:'DM Sans';font-weight:700;color:var(--mu);letter-spacing:.5px;cursor:pointer;border:none;background:none;text-transform:uppercase;transition:color .2s}
 .nb.on{color:var(--acc)}.nb svg{width:20px;height:20px}
-/* CARDS */
-.card{background:var(--s1);border:1px solid var(--br);border-radius:16px}
-/* EXERCISE ROW */
 .ex-row{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--s1);border:1px solid var(--br);border-radius:14px;cursor:pointer;margin-bottom:8px;transition:background .15s}
 .ex-row:active{background:var(--s2)}
 .ex-chk{width:26px;height:26px;border-radius:8px;border:2px solid var(--br);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
 .ex-chk.on{border-color:var(--acc);background:var(--acc)}
-/* INPUTS */
 .si{flex:1;background:var(--s2);border:1px solid var(--br);border-radius:10px;padding:11px 8px;color:var(--tx);font-size:16px;font-family:'DM Sans';text-align:center;width:0;font-weight:600}
 .si:focus{outline:none;border-color:var(--acc)}
-/* TIMER — fixed to viewport always on top */
-.timer-ov{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(16px)}
-/* HEATMAP */
+.timer-ov{position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(20px)}
 .hm{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
 .hm-c{aspect-ratio:1;border-radius:3px;background:var(--s2)}
 .hm-c.tr{background:var(--acc)}.hm-c.re{background:var(--s3)}.hm-c.td{box-shadow:0 0 0 2px var(--acc)}
-/* MISC */
-.sec{padding:0 16px;margin-bottom:18px}
 .stl{font-family:'Space Mono';font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}
 .btn-acc{background:var(--acc);color:#000;border:none;border-radius:13px;padding:15px;font-weight:800;font-size:14px;cursor:pointer;font-family:'DM Sans';width:100%;letter-spacing:.3px;transition:opacity .2s}
 .btn-acc:active{opacity:.85}
 .suggest{background:linear-gradient(135deg,rgba(200,241,53,.07),rgba(200,241,53,.02));border:1px solid rgba(200,241,53,.2);border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px}
 .tip-box{background:var(--s1);border-left:3px solid var(--acc);border-radius:0 12px 12px 0;padding:13px 15px;margin-bottom:14px;font-size:13px;line-height:1.65;color:var(--tx)}
-.water-cup{width:34px;height:34px;border-radius:8px;border:2px solid var(--br);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all .2s}
+.water-cup{width:34px;height:34px;border-radius:8px;border:2px solid var(--br);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px}
 .water-cup.on{border-color:#4daaff;background:rgba(77,170,255,.15)}
 .badge-c{background:var(--s1);border:1px solid var(--br);border-radius:14px;padding:14px;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center}
 .badge-c.lock{opacity:.3;filter:grayscale(1)}.badge-c.unl{border-color:var(--gold);background:linear-gradient(135deg,#181200,#0e0e0e)}
@@ -60,16 +47,23 @@ body{color:var(--tx);font-family:'DM Sans',sans-serif;overflow:hidden;height:100
 .tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border-radius:12px;cursor:pointer;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;font-family:'DM Sans';border:1px solid var(--br);background:var(--s1);color:var(--mu);transition:all .2s}
 .tab-btn.on{border-color:var(--acc);background:rgba(200,241,53,.07);color:var(--acc)}
 .bar-chart{display:flex;align-items:flex-end;gap:4px;height:72px;padding:0 2px}
-.b-bar{flex:1;border-radius:4px 4px 0 0;min-height:4px;transition:height .5s}
+.b-bar{flex:1;border-radius:4px 4px 0 0;min-height:4px}
 .ph-slot{aspect-ratio:1;border-radius:12px;overflow:hidden;cursor:pointer;border:2px dashed var(--br);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:11px;color:var(--mu);background:var(--s2)}
 @keyframes su{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
 .su{animation:su .22s ease forwards}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(200,241,53,.35)}50%{box-shadow:0 0 0 14px rgba(200,241,53,0)}}
 .pulse{animation:pulse 2s infinite}
+@keyframes pulseRed{0%,100%{box-shadow:0 0 0 0 rgba(255,77,77,.5)}50%{box-shadow:0 0 0 20px rgba(255,77,77,0)}}
+.pulseRed{animation:pulseRed 1s infinite}
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
 input,button,textarea{-webkit-tap-highlight-color:transparent}
 textarea{background:var(--s2);border:1px solid var(--br);border-radius:10px;padding:10px 12px;color:var(--tx);font-size:13px;font-family:'DM Sans';resize:none;width:100%}
 textarea:focus{outline:none;border-color:var(--acc)}
+/* TABATA */
+.tabata-ex-name{font-family:'Bebas Neue';font-size:36px;letter-spacing:2px;text-align:center;line-height:1.1}
+.tabata-phase{font-family:'Space Mono';font-size:13px;letter-spacing:3px;text-transform:uppercase;text-align:center;margin-bottom:8px}
+.tabata-num{font-family:'Bebas Neue';font-size:100px;line-height:1;text-align:center;letter-spacing:-2px}
+.tabata-ring{position:relative;width:220px;height:220px;margin:0 auto 20px}
 </style>
 </head>
 <body>
@@ -91,34 +85,45 @@ const I={
   arr:()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><polyline points="9 18 15 12 9 6"/></svg>,
 };
 
-// ─── LOCAL STORAGE ────────────────────────────────────────────────────────────
+// ─── STORAGE ──────────────────────────────────────────────────────────────────
 function useLS(k,init){
-  const [v,sv]=useState(()=>{try{const s=localStorage.getItem(k);return s?JSON.parse(s):init}catch{return init}});
+  const[v,sv]=useState(()=>{try{const s=localStorage.getItem(k);return s?JSON.parse(s):init}catch{return init}});
   const set=val=>{const n=typeof val==="function"?val(v):val;sv(n);try{localStorage.setItem(k,JSON.stringify(n))}catch{}};
   return[v,set];
 }
-function lsGet(k,fb){try{const s=localStorage.getItem(k);return s?JSON.parse(s):fb}catch{return fb}}
-function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
-function lsDel(k){try{localStorage.removeItem(k)}catch{}}
+const lsGet=(k,fb)=>{try{const s=localStorage.getItem(k);return s?JSON.parse(s):fb}catch{return fb}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}};
+const lsDel=(k)=>{try{localStorage.removeItem(k)}catch{}};
 
-// ─── COLORS / SCHEDULE ───────────────────────────────────────────────────────
+// ─── SCHEDULE ─────────────────────────────────────────────────────────────────
+// Dom=rest, Seg=push, Ter=pull, Qua=legs, Qui=upper, Sex=lower, Sáb=abs
+const SCHED=["rest","push","pull","legs","upper","lower","abs"];
 const TC={push:"#ff4d4d",pull:"#4dffa0",legs:"#c8f135",upper:"#6496ff",lower:"#ffaa00",abs:"#ff9f43"};
 const TI={push:"💥",pull:"🎯",legs:"🦵",upper:"💪",lower:"⚡",abs:"🔥"};
-// Dom=rest, Seg=push, Ter=pull, Qua=legs, Qui=upper, Sex=lower, Sáb=rest
-const SCHED=["rest","push","pull","legs","upper","lower","rest"];
-// Abdominal: após Push (Seg) e Pull (Ter)
-const ABS_DAYS=[1,2];
 const WN=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
 
-// ─── WORKOUTS DATA ────────────────────────────────────────────────────────────
+// ─── TABATA EXERCISES (Sábado) ────────────────────────────────────────────────
+// 8 exercícios, 20s execução + 10s descanso, 3 rounds, 2min descanso entre rounds
+const TABATA_EX=[
+  {id:"t1",n:"Abdominal Crunch",tip:"Deitado de costas, joelhos flexionados. Mãos atrás da cabeça ou cruzadas no peito. Contraia o abdômen levantando os ombros do chão. Não force o pescoço. Expire na subida, inspire na descida.",yt:"https://www.youtube.com/results?search_query=abdominal+crunch+execucao"},
+  {id:"t2",n:"Abdominal Infra Alternado",tip:"Deitado, mãos sob os glúteos. Eleve uma perna esticada a 45° enquanto mantém a outra próxima ao chão. Alterne de forma controlada sem deixar os pés tocarem o chão.",yt:"https://www.youtube.com/results?search_query=abdominal+infra+alternado+execucao"},
+  {id:"t3",n:"Abdominal Bicicleta",tip:"Deitado, mãos atrás da cabeça. Leve o cotovelo direito ao joelho esquerdo enquanto estende a perna direita. Alterne em movimento de pedalada. Rotação total do tronco — não só dos cotovelos.",yt:"https://www.youtube.com/results?search_query=abdominal+bicicleta+execucao"},
+  {id:"t4",n:"Corrida em Prancha",tip:"Posição de prancha alta (apoio nas mãos). Puxe um joelho de cada vez em direção ao peito em ritmo acelerado. Mantenha o quadril alinhado e o core contraído. Não deixe o quadril subir.",yt:"https://www.youtube.com/results?search_query=corrida+prancha+mountain+climber+execucao"},
+  {id:"t5",n:"L-Crunch (Canivete)",tip:"Deitado, braços e pernas estendidos. Simultaneamente levante pernas e tronco formando um 'V'. Tente tocar os pés com as mãos. Expire na subida. Volte lentamente sem tocar completamente o chão.",yt:"https://www.youtube.com/results?search_query=l+crunch+canivete+abdominal+execucao"},
+  {id:"t6",n:"Abdominal Remador Sem Apoio",tip:"Sentado, tronco levemente reclinado, pernas elevadas e flexionadas. Abra e feche (estendendo as pernas) enquanto recua e avança o tronco — como o movimento de um remo. Core sempre contraído.",yt:"https://www.youtube.com/results?search_query=abdominal+remador+execucao"},
+  {id:"t7",n:"Abdominal Soco no Alto",tip:"Deitado com as pernas a 90°. Suba o tronco como um crunch e execute socos alternados para cima. Mantenha os ombros elevados durante toda a série. Oblíquos e reto abdominal em ação constante.",yt:"https://www.youtube.com/results?search_query=abdominal+soco+no+alto+execucao"},
+  {id:"t8",n:"Prancha Toque no Ombro",tip:"Posição de prancha alta. Enquanto mantém o corpo estável, leve uma mão ao ombro oposto, alternando. O segredo é NÃO deixar o quadril rotacionar — mantenha-o paralelo ao chão o tempo todo.",yt:"https://www.youtube.com/results?search_query=prancha+toque+no+ombro+execucao"},
+];
+
+// ─── WORKOUTS ─────────────────────────────────────────────────────────────────
 const WK={
   push:{id:"push",type:"push",name:"PUSH",label:"Treino A",color:"#ff4d4d",rest:90,ex:[
     {id:"p1",n:"Supino Reto Barra Olímpica",s:"6x",r:"—",nt:"2x aquec · 2x prep · 2x válidas",tip:"Desça a barra controlada até tocar o peito. Empurre explosivo. Pés firmes, arco lombar natural. Retraia as escápulas durante todo o movimento.",sub:["Supino com Halteres","Supino na Máquina","Crossover Polia Alta"],yt:"https://www.youtube.com/results?search_query=supino+reto+barra+execucao"},
-    {id:"p2",n:"Crossover Polia Alta",s:"4x",r:"12",nt:"progressão de carga",tip:"Incline o tronco levemente. Puxe em arco até as mãos se encontrarem. Sinta o alongamento máximo no peitoral. Não trave os cotovelos.",sub:["Crucifixo Máquina","Fly com Halteres"],yt:"https://www.youtube.com/results?search_query=crossover+polia+alta+execucao"},
+    {id:"p2",n:"Crossover Polia Alta",s:"4x",r:"12",nt:"progressão de carga",tip:"Incline o tronco levemente. Puxe em arco até as mãos se encontrarem. Sinta o alongamento máximo no peitoral.",sub:["Crucifixo Máquina","Fly com Halteres"],yt:"https://www.youtube.com/results?search_query=crossover+polia+alta+execucao"},
     {id:"p3",n:"Supino Inclinado com Halter",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Banco a 30-45°. Cotovelos a 75°. Empurre controlado. Trabalha a parte superior do peitoral.",sub:["Supino Inclinado Barra","Crossover Polia Média"],yt:"https://www.youtube.com/results?search_query=supino+inclinado+halter+execucao"},
     {id:"p4",n:"Elevação Lateral no Banco",s:"4x",r:"8-12",nt:"progressão · drop set na última",tip:"Banco a 45°. Cotovelo levemente flexionado. Não eleve além dos ombros. Drop set: reduza 30% na última série.",sub:["Elevação Lateral Cabo","Elevação Lateral Livre"],yt:"https://www.youtube.com/results?search_query=elevacao+lateral+banco+inclinado"},
-    {id:"p5",n:"Elevação Frontal com Corda",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Mãos em neutro segurando a corda. Eleve até a altura dos ombros. Não balance o corpo.",sub:["Elevação Frontal Halter","Elevação Frontal Cabo"],yt:"https://www.youtube.com/results?search_query=elevacao+frontal+corda+polia"},
-    {id:"p6",n:"Bíceps na Polia Barra Reta",s:"4x",r:"8-12",nt:"progressão · costas pra polia",tip:"De costas para a polia. Cotovelos fixos ao lado do corpo. Contração máxima no topo. Descida controlada.",sub:["Rosca Direta","Bíceps Máquina"],yt:"https://www.youtube.com/results?search_query=rosca+polia+barra+reta+costas"},
+    {id:"p5",n:"Elevação Frontal com Corda",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Mãos em neutro. Eleve até a altura dos ombros. Não balance o corpo.",sub:["Elevação Frontal Halter","Elevação Frontal Cabo"],yt:"https://www.youtube.com/results?search_query=elevacao+frontal+corda+polia"},
+    {id:"p6",n:"Bíceps na Polia Barra Reta",s:"4x",r:"8-12",nt:"progressão · costas pra polia",tip:"De costas para a polia. Cotovelos fixos ao lado do corpo. Contração máxima no topo.",sub:["Rosca Direta","Bíceps Máquina"],yt:"https://www.youtube.com/results?search_query=rosca+polia+barra+reta+costas"},
     {id:"p7",n:"Bíceps Banco Scott Barra W",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Braços totalmente apoiados no Scott. Barra W reduz estresse no pulso. Descida lenta, contração explosiva.",sub:["Rosca Concentrada","Rosca Martelo"],yt:"https://www.youtube.com/results?search_query=rosca+scott+barra+W+execucao"},
   ]},
   pull:{id:"pull",type:"pull",name:"PULL",label:"Treino B",color:"#4dffa0",rest:90,ex:[
@@ -128,8 +133,8 @@ const WK={
     {id:"b4",n:"Puxada Triângulo",s:"4x",r:"8-12",nt:"4x progressão de carga",tip:"Pegada neutra com triângulo. Puxe até o abdômen com cotovelos para trás.",sub:["Remada Triângulo","Remada Barra"],yt:"https://www.youtube.com/results?search_query=puxada+triangulo+execucao"},
     {id:"b5",n:"Crucifixo Inverso Máquina",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Abra os braços em arco para trás. Contraia os deltoides posteriores. Sem impulso do corpo.",sub:["Crucifixo Inverso Polia","Face Pull"],yt:"https://www.youtube.com/results?search_query=crucifixo+inverso+maquina"},
     {id:"b6",n:"Tríceps Máquina",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Cotovelos fixos. Estenda completamente. Contração máxima no final. Descida lenta.",sub:["Tríceps Polia","Tríceps Testa"],yt:"https://www.youtube.com/results?search_query=triceps+maquina+execucao"},
-    {id:"b7",n:"Tríceps Pulley",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Cotovelos colados ao corpo. Estenda totalmente. Não abra os cotovelos durante o movimento.",sub:["Tríceps Máquina","Tríceps Mergulho"],yt:"https://www.youtube.com/results?search_query=triceps+pulley+execucao"},
-    {id:"b8",n:"Tríceps Testa Barra W",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Deitado no banco. Baixe a barra W em direção à testa. Cotovelos fixos apontando para cima. Extensão total.",sub:["Tríceps Francês","Tríceps Polia"],yt:"https://www.youtube.com/results?search_query=triceps+testa+barra+W"},
+    {id:"b7",n:"Tríceps Pulley",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Cotovelos colados ao corpo. Estenda totalmente. Não abra os cotovelos.",sub:["Tríceps Máquina","Tríceps Mergulho"],yt:"https://www.youtube.com/results?search_query=triceps+pulley+execucao"},
+    {id:"b8",n:"Tríceps Testa Barra W",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Baixe a barra W em direção à testa. Cotovelos fixos apontando para cima. Extensão total.",sub:["Tríceps Francês","Tríceps Polia"],yt:"https://www.youtube.com/results?search_query=triceps+testa+barra+W"},
   ]},
   legs:{id:"legs",type:"legs",name:"LEGS",label:"Treino C",color:"#c8f135",rest:120,ex:[
     {id:"l1",n:"Agachamento Livre ou Pêndulo",s:"6x",r:"8-12",nt:"2x aquec · 2x prep · 2x válidas",tip:"Pés na largura dos ombros, levemente abertos. Desça até a coxa paralela. Subida explosiva, descida em 3 segundos.",sub:["Agachamento Smith","Leg Press 45°"],yt:"https://www.youtube.com/results?search_query=agachamento+livre+execucao+tecnica"},
@@ -141,31 +146,27 @@ const WK={
   ]},
   upper:{id:"upper",type:"upper",name:"UPPER",label:"Treino D",color:"#6496ff",rest:90,ex:[
     {id:"u1",n:"Puxada Frente",s:"4x",r:"15",nt:"1 aquec · 1 prep · 2 válidas",tip:"Pegada pronada. Puxe com as costas, não os braços. Barra ao queixo. Controle o retorno.",sub:["Puxada Máquina","Remada"],yt:"https://www.youtube.com/results?search_query=puxada+frente+execucao+tecnica"},
-    {id:"u2",n:"Remada Máquina Pegada Aberta",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Retraia as escápulas. Puxe em direção ao abdômen. Descida lenta e controlada.",sub:["Remada Articulada","Remada Curvada"],yt:"https://www.youtube.com/results?search_query=remada+maquina+aberta"},
-    {id:"u3",n:"Crucifixo Máquina",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Amplitude completa. Contração máxima no final. Foco na conexão mente-músculo.",sub:["Crucifixo Cabo","Supino com Halteres"],yt:"https://www.youtube.com/results?search_query=crucifixo+maquina+execucao"},
+    {id:"u2",n:"Remada Máquina Pegada Aberta",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Retraia as escápulas. Puxe em direção ao abdômen. Descida lenta.",sub:["Remada Articulada","Remada Curvada"],yt:"https://www.youtube.com/results?search_query=remada+maquina+aberta"},
+    {id:"u3",n:"Crucifixo Máquina",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Amplitude completa. Contração máxima no final. Conexão mente-músculo.",sub:["Crucifixo Cabo","Supino com Halteres"],yt:"https://www.youtube.com/results?search_query=crucifixo+maquina+execucao"},
     {id:"u4",n:"Crossover Polia Alta",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Incline o tronco. Arco no movimento. Mãos se encontram na altura do abdômen.",sub:["Crucifixo Máquina","Fly Cabo"],yt:"https://www.youtube.com/results?search_query=crossover+polia+alta+execucao"},
     {id:"u5",n:"Desenvolvimento com Halter",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Sentado. Halteres na altura dos ombros. Empurre acima da cabeça sem travar os cotovelos.",sub:["Desenvolvimento Máquina","Elevação Lateral"],yt:"https://www.youtube.com/results?search_query=desenvolvimento+halter+ombro"},
     {id:"u6",n:"Elevação Unilateral na Polia",s:"4x",r:"12",nt:"progressão de carga",tip:"Unilateral para equilíbrio muscular. Eleve até a altura do ombro. Controle total na descida.",sub:["Elevação Lateral Halter","Face Pull"],yt:"https://www.youtube.com/results?search_query=elevacao+lateral+unilateral+polia"},
     {id:"u7",n:"Bíceps Unilateral Banco Inclinado",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Banco a 45°. Braço pendurado. Enrole totalmente. Contração máxima no topo.",sub:["Rosca Direta","Rosca Scott"],yt:"https://www.youtube.com/results?search_query=rosca+unilateral+banco+inclinado"},
     {id:"u8",n:"Tríceps Barra W na Polia",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Cotovelos fixos ao lado do corpo. Extensão total. Não abra os cotovelos.",sub:["Tríceps Máquina","Tríceps Corda"],yt:"https://www.youtube.com/results?search_query=triceps+barra+W+polia"},
   ]},
+  // BUG FIX: elevação pélvica adicionada ao Lower (melhor dia: glúteos como foco + posterior cadeia)
   lower:{id:"lower",type:"lower",name:"LOWER",label:"Treino E",color:"#ffaa00",rest:120,ex:[
     {id:"e1",n:"Mesa Flexora",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Deitado de bruços. Enrole os calcanhares. Descida controlada em 3 segundos. Foco nos isquiotibiais.",sub:["Stiff","Flexora em Pé"],yt:"https://www.youtube.com/results?search_query=mesa+flexora+execucao"},
     {id:"e2",n:"Cadeira Flexora",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Sentado. Puxe para baixo com controle. Postura ereta durante todo o movimento.",sub:["Mesa Flexora","Stiff"],yt:"https://www.youtube.com/results?search_query=cadeira+flexora+sentado"},
     {id:"e3",n:"Búlgaro",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Pé traseiro apoiado no banco. Desça até a coxa dianteira ficar paralela ao chão. Ótimo para glúteos e quadríceps.",sub:["Agachamento Livre","Leg Press"],yt:"https://www.youtube.com/results?search_query=agachamento+bulgaro+execucao"},
     {id:"e4",n:"Hack Squat",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Pés na largura dos ombros. Desça controlado. Joelhos alinhados com os pés.",sub:["Leg Press","Agachamento Smith"],yt:"https://www.youtube.com/results?search_query=hack+squat+execucao"},
-    {id:"e5",n:"Cadeira Extensora",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Extensão completa. Descida em 3 segundos. Máximo estímulo no quadríceps.",sub:["Agachamento","Leg Press"],yt:"https://www.youtube.com/results?search_query=cadeira+extensora+execucao"},
-    {id:"e6",n:"Panturrilha no Smith",s:"6x",r:"até a falha",nt:"até a falha em todas",tip:"Amplitude máxima. 1 segundo no topo. Vai até a falha em todas as séries.",sub:["Panturrilha Máquina","Panturrilha Livre"],yt:"https://www.youtube.com/results?search_query=panturrilha+smith+execucao"},
+    // BUG FIX: elevação pélvica inserida aqui — melhor posição: após compostos de posterior cadeia
+    {id:"e5",n:"Elevação Pélvica (Hip Thrust)",s:"4x",r:"10-15",nt:"progressão de carga · 2s no topo",tip:"Costas apoiadas no banco, barra sobre o quadril com almofada. Empurre o quadril para cima contraindo os glúteos com força. Segure 2 segundos no topo. Desça controlado. Joelhos apontando para fora durante todo o movimento. É o melhor exercício para glúteos — use carga progressiva.",sub:["Elevação Pélvica no Chão","Elevação Pélvica Unilateral","Extensão de Quadril no Cabo"],yt:"https://www.youtube.com/results?search_query=hip+thrust+elevacao+pelvica+execucao"},
+    {id:"e6",n:"Cadeira Extensora",s:"4x",r:"8-12",nt:"progressão de carga",tip:"Extensão completa. Descida em 3 segundos. Máximo estímulo no quadríceps.",sub:["Agachamento","Leg Press"],yt:"https://www.youtube.com/results?search_query=cadeira+extensora+execucao"},
+    {id:"e7",n:"Panturrilha no Smith",s:"6x",r:"até a falha",nt:"até a falha em todas",tip:"Amplitude máxima. 1 segundo no topo. Vai até a falha em todas as séries.",sub:["Panturrilha Máquina","Panturrilha Livre"],yt:"https://www.youtube.com/results?search_query=panturrilha+smith+execucao"},
   ]},
-  // ─── ABDOMINAL — 2x semana (após Push e Pull) ─────────────────────────────
-  abs:{id:"abs",type:"abs",name:"ABDOMINAL",label:"Finalizador",color:"#ff9f43",rest:45,ex:[
-    {id:"ab1",n:"Crunch na Polia Alta",s:"4x",r:"15-20",nt:"progressão de carga",tip:"Ajoelhado de frente para a polia. Segure a corda na nuca. Flexione o tronco levando os cotovelos em direção aos joelhos. Contraia o abdômen no ponto mais baixo e suba lentamente. Não use o pescoço — o movimento vem do core.",sub:["Crunch no Chão","Crunch com Peso"],yt:"https://www.youtube.com/results?search_query=crunch+polia+alta+execucao"},
-    {id:"ab2",n:"Elevação de Pernas na Barra",s:"4x",r:"12-15",nt:"sem balançar o corpo",tip:"Segure a barra com pegada pronada. Mantenha as pernas juntas e semi-flexionadas. Eleve até a linha da cintura ou além. Desça controlado sem deixar os pés caírem. O movimento deve vir do quadril e core, não do balanço.",sub:["Elevação de Pernas no Chão","Elevação de Joelhos"],yt:"https://www.youtube.com/results?search_query=elevacao+pernas+barra+execucao"},
-    {id:"ab3",n:"Prancha Isométrica",s:"4x",r:"45-60s",nt:"sem ceder o quadril",tip:"Antebraços no chão, corpo reto como uma tábua. Contraia o abdômen, glúteos e quadríceps ao mesmo tempo. Respire normalmente. Se o quadril subir ou descer, pare. Qualidade acima de tempo.",sub:["Prancha com Elevação de Braço","Prancha Lateral"],yt:"https://www.youtube.com/results?search_query=prancha+isometrica+execucao+correta"},
-    {id:"ab4",n:"Russian Twist com Peso",s:"3x",r:"20 alternados",nt:"progressão de carga",tip:"Sentado com os joelhos flexionados e pés levemente elevados. Segure um halter ou anilha com as duas mãos. Gire o tronco de lado a lado tocando o peso no chão. Mantenha o abdômen contraído e as costas retas durante todo o movimento.",sub:["Russian Twist sem Peso","Rotação no Cabo"],yt:"https://www.youtube.com/results?search_query=russian+twist+peso+execucao"},
-    {id:"ab5",n:"Dead Bug",s:"3x",r:"10 cada lado",nt:"controle total",tip:"Deitado de costas, braços estendidos para cima, joelhos a 90°. Expire e estenda o braço direito e a perna esquerda simultaneamente até quase tocar o chão. Inspire ao voltar. Alterne. O lombar deve permanecer colado ao chão durante todo o movimento — é o ponto chave.",sub:["Abdominal Bicycle","Hollow Body"],yt:"https://www.youtube.com/results?search_query=dead+bug+execucao+abdominal"},
-    {id:"ab6",n:"Oblíquo na Polia Lateral",s:"3x",r:"15-20 cada lado",nt:"progressão de carga",tip:"De pé ao lado da polia na altura da cabeça. Segure com as duas mãos. Flexione o tronco lateralmente puxando a polia em direção ao quadril oposto. Retorne controlado. Trabalha o oblíquo — essencial para a definição lateral do abdômen.",sub:["Abdominal Lateral no Chão","Prancha Lateral com Peso"],yt:"https://www.youtube.com/results?search_query=obliquo+polia+lateral+execucao"},
-  ]},
+  // BUG FIX: abs agora é exclusivo de SÁBADO com exercícios corretos + TABATA mode
+  abs:{id:"abs",type:"abs",name:"ABDOMINAL",label:"Sábado — Tabata",color:"#ff9f43",rest:0,tabata:true,ex:TABATA_EX},
 };
 
 const DIET={kcal:2800,protein:180,carbs:310,fat:80,water:3.5,meals:[
@@ -182,8 +183,8 @@ const BADGES=[
   {id:"b2",ic:"⚡",name:"Tomou Gosto",desc:"5 treinos",ok:w=>w>=5},
   {id:"b3",ic:"💪",name:"10x Guerreiro",desc:"10 treinos",ok:w=>w>=10},
   {id:"b4",ic:"🦁",name:"Modo Fera",desc:"20 treinos",ok:w=>w>=20},
-  {id:"b5",ic:"🔥",name:"Semana em Chamas",desc:"7 dias de streak",ok:(w,s)=>s>=7},
-  {id:"b6",ic:"🏆",name:"Campeão do Mês",desc:"30 dias de streak",ok:(w,s)=>s>=30},
+  {id:"b5",ic:"🔥",name:"Semana em Chamas",desc:"7 dias de streak",ok:(_,s)=>s>=7},
+  {id:"b6",ic:"🏆",name:"Campeão do Mês",desc:"30 dias de streak",ok:(_,s)=>s>=30},
   {id:"b7",ic:"💯",name:"Centurião",desc:"100 treinos",ok:w=>w>=100},
   {id:"b8",ic:"🎯",name:"Shape Agosto",desc:"Meta atingida!",ok:()=>false},
 ];
@@ -199,28 +200,41 @@ const suggest=logs=>{
   return`Última: ${l.sets.map(s=>`${s.r||"?"}×${s.kg||"?"}kg`).join(" · ")}`;
 };
 
-// ─── TOAST ────────────────────────────────────────────────────────────────────
-function Toast({msg,show,err}){
-  return <div style={{position:"fixed",top:20,left:"50%",transform:`translateX(-50%) translateY(${show?0:-90}px)`,background:err?"var(--red)":"var(--acc)",color:err?"#fff":"#000",padding:"11px 20px",borderRadius:12,fontWeight:700,fontSize:14,zIndex:99999,transition:"transform .4s cubic-bezier(.34,1.56,.64,1)",whiteSpace:"nowrap",maxWidth:"88vw",textAlign:"center",pointerEvents:"none"}}>{msg}</div>;
+// Beep using Web Audio API
+function beep(freq=880,dur=120,vol=0.4){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator();const g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.frequency.value=freq;g.gain.value=vol;
+    o.start();g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur/1000);
+    setTimeout(()=>ctx.close(),dur+50);
+  }catch{}
 }
 
-// ─── REST TIMER — rendered in document body portal ────────────────────────────
-// BUG FIX: timer now uses a module-level ref so it survives component re-renders
-// and is attached directly to document body, avoiding z-index stacking issues.
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function Toast({msg,show,err}){
+  return<div style={{position:"fixed",top:20,left:"50%",transform:`translateX(-50%) translateY(${show?0:-90}px)`,background:err?"var(--red)":"var(--acc)",color:err?"#fff":"#000",padding:"11px 20px",borderRadius:12,fontWeight:700,fontSize:14,zIndex:99999,transition:"transform .4s cubic-bezier(.34,1.56,.64,1)",whiteSpace:"nowrap",maxWidth:"88vw",textAlign:"center",pointerEvents:"none"}}>{msg}</div>;
+}
+
+// ─── REST TIMER — portal to body ──────────────────────────────────────────────
+// BUG FIX: uses createPortal so z-index issues are completely avoided
 function RestTimer({sec,onDone,onSkip}){
-  const [left,setLeft]=useState(sec);
+  const[left,setLeft]=useState(sec);
   const circ=2*Math.PI*54;
   useEffect(()=>{
-    if(left<=0){onDone();return;}
+    if(left<=0){beep(440,200);onDone();return;}
     const t=setTimeout(()=>setLeft(l=>l-1),1000);
     return()=>clearTimeout(t);
   },[left]);
+  // BUG FIX: beep at 3s warning
+  useEffect(()=>{if(left===3)beep(660,100);},[left]);
   const col=left<=10?"#ff4d4d":left<=30?"#ffaa00":"#c8f135";
   const dash=circ*(left/sec);
   return ReactDOM.createPortal(
     <div className="timer-ov" onClick={e=>e.stopPropagation()}>
-      <div style={{fontFamily:"Space Mono",fontSize:10,color:"var(--mu)",letterSpacing:3,textTransform:"uppercase",marginBottom:28}}>⏱ Descanso entre séries</div>
-      <div style={{position:"relative",width:180,height:180,marginBottom:28}}>
+      <div style={{fontFamily:"Space Mono",fontSize:10,color:"var(--mu)",letterSpacing:3,textTransform:"uppercase",marginBottom:24}}>⏱ Descanso entre séries</div>
+      <div className="tabata-ring">
         <svg style={{position:"absolute",inset:0,transform:"rotate(-90deg)"}} viewBox="0 0 120 120">
           <circle cx="60" cy="60" r="54" fill="none" stroke="#1a1a1a" strokeWidth="7"/>
           <circle cx="60" cy="60" r="54" fill="none" stroke={col} strokeWidth="7"
@@ -228,16 +242,218 @@ function RestTimer({sec,onDone,onSkip}){
             style={{transition:"stroke-dasharray .95s linear,stroke .4s"}}/>
         </svg>
         <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
-          <div style={{fontFamily:"Bebas Neue",fontSize:64,color:col,lineHeight:1,letterSpacing:2}}>{fmt(left)}</div>
+          <div style={{fontFamily:"Bebas Neue",fontSize:72,color:col,lineHeight:1,letterSpacing:2}}>{fmt(left)}</div>
           <div style={{fontSize:10,color:"var(--mu)",fontFamily:"Space Mono",letterSpacing:2}}>restantes</div>
         </div>
       </div>
       <div style={{display:"flex",gap:10,width:260}}>
-        <button onClick={()=>setLeft(l=>Math.min(l+15,l+15))} style={{flex:1,padding:14,borderRadius:12,border:"1px solid var(--br)",background:"var(--s2)",color:"var(--tx)",fontWeight:700,fontSize:14,cursor:"pointer",fontFamily:"DM Sans"}}>+15s</button>
+        {/* BUG FIX: +15s now adds 15 to current time with no broken cap */}
+        <button onClick={()=>setLeft(l=>l+15)} style={{flex:1,padding:14,borderRadius:12,border:"1px solid var(--br)",background:"var(--s2)",color:"var(--tx)",fontWeight:700,fontSize:14,cursor:"pointer",fontFamily:"DM Sans"}}>+15s</button>
         <button onClick={onSkip} style={{flex:2,padding:14,borderRadius:12,border:"none",background:col,color:"#000",fontWeight:700,fontSize:14,cursor:"pointer",fontFamily:"DM Sans"}}>Pular ▶</button>
       </div>
     </div>,
     document.body
+  );
+}
+
+// ─── TABATA SCREEN ────────────────────────────────────────────────────────────
+// Full Tabata implementation: 20s work / 10s rest / 8 exercises / 3 rounds / 2min between rounds
+function TabataScreen({onBack,onFinish,goTab}){
+  const WORK=20,REST=10,ROUNDS=3,ROUND_REST=120;
+  const[phase,setPhase]=useState("intro"); // intro | work | rest | roundRest | done
+  const[round,setRound]=useState(1);
+  const[exIdx,setExIdx]=useState(0);
+  const[left,setLeft]=useState(WORK);
+  const[totalTime,setTotalTime]=useState(0);
+
+  const ex=TABATA_EX[exIdx];
+  const nextEx=TABATA_EX[(exIdx+1)%TABATA_EX.length];
+  const isLastEx=exIdx===TABATA_EX.length-1;
+  const isLastRound=round===ROUNDS;
+
+  // Total time tracker
+  useEffect(()=>{
+    if(phase==="work"||phase==="rest"||phase==="roundRest"){
+      const t=setInterval(()=>setTotalTime(s=>s+1),1000);
+      return()=>clearInterval(t);
+    }
+  },[phase]);
+
+  useEffect(()=>{
+    if(phase==="intro"||phase==="done")return;
+    if(left<=0){
+      // Transition logic
+      if(phase==="work"){
+        beep(440,150); // end of work
+        if(isLastEx&&isLastRound){setPhase("done");return;}
+        if(isLastEx){
+          // end of round
+          setPhase("roundRest");setLeft(ROUND_REST);
+        } else {
+          setPhase("rest");setLeft(REST);
+        }
+      } else if(phase==="rest"){
+        beep(880,200); // start of work
+        setExIdx(i=>i+1);setPhase("work");setLeft(WORK);
+      } else if(phase==="roundRest"){
+        beep(880,300); // new round
+        setRound(r=>r+1);setExIdx(0);setPhase("work");setLeft(WORK);
+      }
+      return;
+    }
+    // 3-second countdown beep
+    if(left===3)beep(660,80);
+    if(left===2)beep(660,80);
+    if(left===1)beep(660,80);
+    const t=setTimeout(()=>setLeft(l=>l-1),1000);
+    return()=>clearTimeout(t);
+  },[left,phase]);
+
+  const startTabata=()=>{
+    beep(880,200);
+    setPhase("work");setLeft(WORK);setRound(1);setExIdx(0);setTotalTime(0);
+  };
+
+  const phaseColor=phase==="work"?"#ff4d4d":phase==="rest"||phase==="roundRest"?"#4dffa0":"#ff9f43";
+  const phaseName=phase==="work"?"EXECUTE!":phase==="rest"?"RESPIRE":phase==="roundRest"?"DESCANSO":phase==="done"?"CONCLUÍDO!":"";
+  const circ=2*Math.PI*54;
+  const maxTime=phase==="work"?WORK:phase==="rest"?REST:ROUND_REST;
+  const dash=circ*(left/maxTime);
+
+  if(phase==="intro"){
+    return(
+      <div className="screen tabata" style={{background:"var(--bg)"}}>
+        <div style={{flexShrink:0,background:"linear-gradient(135deg,rgba(255,159,67,.15),rgba(255,159,67,.05),var(--bg))",borderBottom:"1px solid var(--br)",padding:"max(env(safe-area-inset-top),14px) 16px 16px"}}>
+          <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
+            <button className="back-btn" onClick={onBack}><I.back/></button>
+            <div>
+              <div style={{fontFamily:"Space Mono",fontSize:9,color:"#ff9f43",letterSpacing:2,textTransform:"uppercase"}}>Sábado · Tabata</div>
+              <div style={{fontFamily:"Bebas Neue",fontSize:32,letterSpacing:2,color:"#ff9f43",lineHeight:1}}>ABDOMINAL</div>
+            </div>
+          </div>
+        </div>
+        <div className="pg" style={{padding:"20px 16px"}}>
+          <div style={{background:"linear-gradient(135deg,rgba(255,159,67,.1),rgba(255,159,67,.03))",border:"1px solid rgba(255,159,67,.3)",borderRadius:16,padding:20,marginBottom:18,textAlign:"center"}}>
+            <div style={{fontSize:32,marginBottom:8}}>🔥</div>
+            <div style={{fontFamily:"Bebas Neue",fontSize:26,letterSpacing:2,color:"#ff9f43",marginBottom:8}}>PROTOCOLO TABATA</div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:12}}>
+              {[["20s","Execução"],["10s","Descanso"],["8","Exercícios"],["3x","Rounds"]].map(([v,l])=>(
+                <div key={l} style={{background:"var(--s2)",borderRadius:10,padding:"10px 8px",textAlign:"center"}}>
+                  <div style={{fontFamily:"Bebas Neue",fontSize:26,color:"#ff9f43",lineHeight:1}}>{v}</div>
+                  <div style={{fontSize:10,color:"var(--mu)",textTransform:"uppercase",letterSpacing:1,marginTop:2}}>{l}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{fontSize:12,color:"var(--mu)"}}>2 minutos de descanso entre cada round</div>
+          </div>
+          <div className="stl">Sequência de exercícios</div>
+          {TABATA_EX.map((e,i)=>(
+            <div key={e.id} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 14px",background:"var(--s1)",border:"1px solid var(--br)",borderRadius:12,marginBottom:6}}>
+              <div style={{fontFamily:"Bebas Neue",fontSize:20,color:"#ff9f43",width:24,textAlign:"center",lineHeight:1}}>{i+1}</div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:13,fontWeight:600}}>{e.n}</div>
+              </div>
+              <a href={e.yt} target="_blank" rel="noopener noreferrer" style={{color:"#ff5555",textDecoration:"none",fontSize:11,fontWeight:700,display:"flex",alignItems:"center",gap:4}}>
+                {I.yt(14,"#ff5555")}YT
+              </a>
+            </div>
+          ))}
+          <div style={{height:16}}/>
+          <button onClick={startTabata} style={{width:"100%",padding:18,borderRadius:14,border:"none",background:"linear-gradient(135deg,#ff9f43,#ff6b35)",color:"#000",fontWeight:800,fontSize:16,cursor:"pointer",fontFamily:"DM Sans",letterSpacing:.5}}>
+            🔥 COMEÇAR TABATA
+          </button>
+          <div style={{height:24}}/>
+        </div>
+        <div className="nav">
+          {[["home","Início",<I.home/>],["diet","Dieta",<I.diet/>],["rewards","Conquistas",<I.trophy/>],["profile","Perfil",<I.user/>]].map(([id,lb,ic])=>(
+            <button key={id} className="nb" onClick={()=>goTab(id)}>{ic}{lb}</button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if(phase==="done"){
+    return(
+      <div className="screen tabata" style={{background:"var(--bg)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:24}}>
+        <div style={{fontSize:64,marginBottom:16}}>🏆</div>
+        <div style={{fontFamily:"Bebas Neue",fontSize:48,letterSpacing:3,color:"#ff9f43",textAlign:"center",marginBottom:8}}>ARRASOU!</div>
+        <div style={{fontSize:16,color:"var(--mu)",textAlign:"center",marginBottom:8}}>3 rounds · {TABATA_EX.length} exercícios</div>
+        <div style={{fontFamily:"Space Mono",fontSize:14,color:"var(--acc)",marginBottom:32}}>Tempo total: {fmt(totalTime)}</div>
+        <button onClick={()=>onFinish(WK.abs)} style={{width:"100%",maxWidth:300,padding:18,borderRadius:14,border:"none",background:"linear-gradient(135deg,#ff9f43,#ff6b35)",color:"#000",fontWeight:800,fontSize:16,cursor:"pointer",fontFamily:"DM Sans",marginBottom:12}}>
+          ✅ Finalizar e salvar
+        </button>
+        <button onClick={onBack} style={{width:"100%",maxWidth:300,padding:14,borderRadius:12,border:"1px solid var(--br)",background:"var(--s2)",color:"var(--mu)",fontWeight:600,fontSize:14,cursor:"pointer",fontFamily:"DM Sans"}}>
+          Voltar
+        </button>
+      </div>
+    );
+  }
+
+  return(
+    <div className="screen tabata" style={{background:phase==="roundRest"?"#0a1a0a":phase==="rest"?"#0a1a0a":"#0e0505",display:"flex",flexDirection:"column"}}>
+      {/* HEADER */}
+      <div style={{flexShrink:0,padding:"max(env(safe-area-inset-top),14px) 16px 12px",borderBottom:"1px solid var(--br)",display:"flex",alignItems:"center",gap:12}}>
+        <button className="back-btn" onClick={onBack}><I.back/></button>
+        <div style={{flex:1}}>
+          <div style={{fontFamily:"Space Mono",fontSize:9,color:"var(--mu)",letterSpacing:2}}>ROUND {round}/{ROUNDS} · EX {exIdx+1}/{TABATA_EX.length}</div>
+        </div>
+        <div style={{fontFamily:"Space Mono",fontSize:12,color:"var(--mu)"}}>{fmt(totalTime)}</div>
+      </div>
+
+      {/* MAIN AREA */}
+      <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"16px 20px"}}>
+        {phase==="roundRest"?(
+          <>
+            <div style={{fontSize:40,marginBottom:16}}>😮‍💨</div>
+            <div className="tabata-phase" style={{color:"#4dffa0",fontSize:16,marginBottom:8}}>DESCANSE</div>
+            <div style={{fontFamily:"Bebas Neue",fontSize:26,color:"var(--tx)",marginBottom:4}}>Próximo round em</div>
+            <div className="tabata-num" style={{color:"#4dffa0"}}>{left}</div>
+            <div style={{fontSize:13,color:"var(--mu)",marginTop:8}}>Round {round+1} começa em breve</div>
+          </>
+        ):(
+          <>
+            <div className="tabata-phase" style={{color:phaseColor,fontSize:14,marginBottom:4,letterSpacing:4}}>{phaseName}</div>
+            <div className="tabata-ring">
+              <svg style={{position:"absolute",inset:0,transform:"rotate(-90deg)"}} viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="54" fill="none" stroke="#1a1a1a" strokeWidth="8"/>
+                <circle cx="60" cy="60" r="54" fill="none" stroke={phaseColor} strokeWidth="8"
+                  strokeDasharray={`${dash} ${circ}`} strokeLinecap="round"
+                  style={{transition:"stroke-dasharray .95s linear"}}/>
+              </svg>
+              <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
+                <div className="tabata-num" style={{color:phaseColor,fontSize:80}}>{left}</div>
+                <div style={{fontSize:10,color:"var(--mu)",fontFamily:"Space Mono",letterSpacing:2}}>{phase==="work"?"segundos":"descanso"}</div>
+              </div>
+            </div>
+            <div className="tabata-ex-name" style={{color:phase==="work"?"var(--tx)":"var(--mu)",marginBottom:8}}>{ex.n}</div>
+            {phase==="work"&&(
+              <div style={{fontSize:11,color:"var(--mu)",textAlign:"center",maxWidth:280,lineHeight:1.5,marginBottom:12}}>{ex.tip.slice(0,80)}...</div>
+            )}
+            {phase==="rest"&&!isLastEx&&(
+              <div style={{textAlign:"center",marginTop:4}}>
+                <div style={{fontSize:10,color:"var(--mu)",textTransform:"uppercase",letterSpacing:1}}>Próximo</div>
+                <div style={{fontSize:16,fontWeight:700,color:"#4dffa0",marginTop:2}}>{nextEx.n}</div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* PROGRESS DOTS */}
+      <div style={{flexShrink:0,padding:"12px 16px",borderTop:"1px solid var(--br)"}}>
+        <div style={{display:"flex",justifyContent:"center",gap:6,marginBottom:8}}>
+          {TABATA_EX.map((_,i)=>(
+            <div key={i} style={{width:8,height:8,borderRadius:"50%",background:i<exIdx?"var(--acc)":i===exIdx?phaseColor:"var(--br)",transition:"background .3s"}}/>
+          ))}
+        </div>
+        <div style={{display:"flex",gap:8}}>
+          {Array.from({length:ROUNDS},(_,i)=>(
+            <div key={i} style={{flex:1,height:3,borderRadius:2,background:i<round-1?"var(--acc)":i===round-1?phaseColor:"var(--br)"}}/>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -267,33 +483,23 @@ function MiniChart({logs}){
 
 // ─── EXERCISE DETAIL ──────────────────────────────────────────────────────────
 function ExDetail({ex,wid,wrest,onBack,goTab,dark}){
-  const [tab,setTab]=useState("log");
-  const [logs,setLogs]=useLS(`lg_${wid}_${ex.id}`,[]);
-  // BUG FIX: initial sets state is stable — never re-initializes from props
-  const [sets,setSets]=useState([{r:"",kg:""},{r:"",kg:""},{r:"",kg:""}]);
-  const [note,setNote]=useState("");
-  const [toast,setToast]=useState({show:false,msg:"",err:false});
-  // BUG FIX: timer state is now a simple boolean, RestTimer is a portal — no stacking issues
-  const [showTimer,setShowTimer]=useState(false);
-  const [restSec,setRestSec]=useState(wrest||90);
-  const timerRef=useRef(null);
-
-  // Cleanup timer timeout on unmount
-  useEffect(()=>()=>{if(timerRef.current)clearTimeout(timerRef.current);},[]);
+  const[tab,setTab]=useState("log");
+  const[logs,setLogs]=useLS(`lg_${wid}_${ex.id}`,[]);
+  const[sets,setSets]=useState([{r:"",kg:""},{r:"",kg:""},{r:"",kg:""}]);
+  const[note,setNote]=useState("");
+  const[toast,setToast]=useState({show:false,msg:"",err:false});
+  const[showTimer,setShowTimer]=useState(false);
+  const[restSec,setRestSec]=useState(wrest||90);
 
   const t2=(msg,err=false)=>{setToast({show:true,msg,err});setTimeout(()=>setToast(v=>({...v,show:false})),2400)};
 
   const save=()=>{
     const v=sets.filter(s=>s.r||s.kg);
     if(!v.length&&!note){t2("⚠️ Preencha ao menos uma série",true);return;}
-    // Save log
-    const newLog={date:new Date().toLocaleString("pt-BR"),sets:v,note,ts:Date.now()};
-    setLogs(l=>[newLog,...l]);
-    // Reset form
+    setLogs(l=>[{date:new Date().toLocaleString("pt-BR"),sets:v,note,ts:Date.now()},...l]);
     setSets([{r:"",kg:""},{r:"",kg:""},{r:"",kg:""}]);
     setNote("");
-    t2("✅ Progressão salva! Descansando...");
-    // BUG FIX: show timer immediately, no setTimeout needed
+    t2("✅ Progressão salva!");
     setShowTimer(true);
   };
 
@@ -307,25 +513,22 @@ function ExDetail({ex,wid,wrest,onBack,goTab,dark}){
   return(
     <div className="screen ex" style={{background:bg}}>
       <Toast msg={toast.msg} show={toast.show} err={toast.err}/>
-      {/* BUG FIX: RestTimer uses createPortal so it's always on top of everything */}
       {showTimer&&<RestTimer sec={restSec} onDone={()=>setShowTimer(false)} onSkip={()=>setShowTimer(false)}/>}
-
       {/* HEADER */}
       <div style={{flexShrink:0,background:`linear-gradient(135deg,${col}18,${col}06,${bg})`,borderBottom:"1px solid var(--br)",padding:"max(env(safe-area-inset-top),14px) 16px 0"}}>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
           <button className="back-btn" onClick={onBack}><I.back/></button>
           <div style={{flex:1}}>
             <div style={{fontSize:10,fontFamily:"Space Mono",color:col,letterSpacing:2,textTransform:"uppercase",marginBottom:2}}>{ex.s} séries · {ex.r} reps</div>
-            <div style={{fontFamily:"Bebas Neue",fontSize:24,letterSpacing:1.5,lineHeight:1.1,color:"var(--tx)"}}>{ex.n}</div>
+            <div style={{fontFamily:"Bebas Neue",fontSize:24,letterSpacing:1.5,lineHeight:1.1}}>{ex.n}</div>
           </div>
-          <div style={{fontSize:38}}>{emo}</div>
+          <div style={{fontSize:36}}>{emo}</div>
         </div>
         <div style={{display:"flex",gap:6,marginBottom:10,flexWrap:"wrap"}}>
           {ex.nt&&<span style={{background:`${col}15`,border:`1px solid ${col}40`,borderRadius:8,padding:"3px 10px",fontSize:11,fontWeight:600,color:col}}>{ex.nt}</span>}
           {oneRM&&<span style={{background:"rgba(100,150,255,.12)",border:"1px solid rgba(100,150,255,.3)",borderRadius:8,padding:"3px 10px",fontSize:11,fontWeight:700,color:"#6496ff"}}>1RM ≈ {oneRM}kg</span>}
           {last&&<span style={{background:"rgba(77,255,160,.1)",border:"1px solid rgba(77,255,160,.25)",borderRadius:8,padding:"3px 10px",fontSize:11,fontWeight:600,color:"var(--grn)"}}>Último: {last.sets[0]?.kg||"—"}kg</span>}
         </div>
-        {/* Timer selector */}
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
           <span style={{fontSize:10,color:"var(--mu)",fontFamily:"Space Mono"}}>Timer de descanso</span>
           <div style={{display:"flex",gap:5}}>
@@ -335,8 +538,6 @@ function ExDetail({ex,wid,wrest,onBack,goTab,dark}){
           </div>
         </div>
       </div>
-
-      {/* CONTENT */}
       <div className="pg">
         <div style={{padding:"12px 16px 32px"}}>
           {sug&&<div className="suggest"><span style={{fontSize:18}}>🤖</span><span style={{fontSize:13,color:"var(--acc)",fontWeight:500,lineHeight:1.4}}>{sug}</span></div>}
@@ -353,8 +554,6 @@ function ExDetail({ex,wid,wrest,onBack,goTab,dark}){
               </button>
             ))}
           </div>
-
-          {/* REGISTRAR */}
           {tab==="log"&&<div className="su">
             <div style={{background:"var(--s1)",border:"1px solid var(--br)",borderRadius:14,padding:16,marginBottom:14}}>
               <div className="stl">Registrar séries</div>
@@ -376,7 +575,6 @@ function ExDetail({ex,wid,wrest,onBack,goTab,dark}){
             </div>
             <button className="btn-acc" onClick={save}>💾 Salvar + Timer {restSec}s</button>
           </div>}
-
           {tab==="chart"&&<div className="su">
             <div className="stl">Evolução da carga (série 1)</div>
             <MiniChart logs={logs}/>
@@ -385,7 +583,6 @@ function ExDetail({ex,wid,wrest,onBack,goTab,dark}){
               <div style={{fontFamily:"Bebas Neue",fontSize:52,color:"var(--acc)",lineHeight:1}}>{oneRM}<span style={{fontSize:22}}>kg</span></div>
             </div>}
           </div>}
-
           {tab==="subs"&&<div className="su">
             <div className="stl">Exercícios substitutos</div>
             {ex.sub?.map((s,i)=>(
@@ -400,7 +597,6 @@ function ExDetail({ex,wid,wrest,onBack,goTab,dark}){
               </div>
             ))}
           </div>}
-
           {tab==="hist"&&<div className="su">
             <div className="stl">Histórico de cargas</div>
             {!logs.length?<div style={{textAlign:"center",color:"var(--mu)",padding:"28px 0",fontSize:13}}>Nenhum registro ainda. Comece! 💪</div>
@@ -426,13 +622,13 @@ function ExDetail({ex,wid,wrest,onBack,goTab,dark}){
 
 // ─── WORKOUT SCREEN ───────────────────────────────────────────────────────────
 function WkScreen({wk,onBack,onFinish,goTab}){
-  // BUG FIX: "done" uses a session key (date-based) so it resets each new day.
-  // Additional manual reset happens when onFinish is called.
-  const sessionKey=`done_${wk.id}_${new Date().toDateString()}`;
-  const [done,setDone]=useState(()=>lsGet(sessionKey,[]));
-  const [selEx,setSelEx]=useState(null);
-  const [dark,setDark]=useLS("dark_wk",false);
-  const [showConfirm,setShowConfirm]=useState(false);
+  // BUG FIX: sessionKey memoized with useRef so it doesn't change on re-render
+  const sessionKey=useRef(`done_${wk.id}_${new Date().toDateString()}`).current;
+  const[done,setDone]=useState(()=>lsGet(sessionKey,[]));
+  const[selEx,setSelEx]=useState(null);
+  const[dark,setDark]=useLS("dark_wk",false);
+  const[showConfirm,setShowConfirm]=useState(false);
+  const[showTabata,setShowTabata]=useState(false);
 
   const saveDone=v=>{setDone(v);lsSet(sessionKey,v);};
   const pct=wk.ex.length>0?done.length/wk.ex.length:0;
@@ -440,28 +636,31 @@ function WkScreen({wk,onBack,onFinish,goTab}){
   const bg=dark?"#000":"var(--bg)";
   const s1=dark?"#090909":"var(--s1)";
 
-  // BUG FIX: finish clears done list AND removes the session key so next open is fresh
   const handleFinish=()=>{
     lsDel(sessionKey);
     setDone([]);
     onFinish(wk);
   };
 
-  if(selEx)return<ExDetail ex={{...selEx,type:wk.type}} wid={wk.id} wrest={wk.rest} onBack={()=>setSelEx(null)} goTab={goTab} dark={dark}/>;
+  // If abs workout — show Tabata instead of normal exercise list
+  if(wk.tabata&&showTabata){
+    return<TabataScreen onBack={()=>setShowTabata(false)} onFinish={()=>{handleFinish();}} goTab={goTab}/>;
+  }
+
+  if(selEx)return<ExDetail ex={{...selEx,type:wk.type}} wid={wk.id} wrest={wk.rest||90} onBack={()=>setSelEx(null)} goTab={goTab} dark={dark}/>;
 
   return(
     <div className="screen wk" style={{background:bg}}>
-      {/* CONFIRM FINISH MODAL */}
       {showConfirm&&ReactDOM.createPortal(
         <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.88)",zIndex:9998,display:"flex",alignItems:"flex-end",justifyContent:"center",padding:"0 16px 32px"}} onClick={()=>setShowConfirm(false)}>
           <div style={{background:"var(--s1)",borderRadius:20,padding:24,width:"100%",maxWidth:398,border:"1px solid var(--br)"}} onClick={e=>e.stopPropagation()}>
             <div style={{fontFamily:"Bebas Neue",fontSize:26,letterSpacing:2,marginBottom:8}}>Finalizar treino?</div>
             <div style={{fontSize:14,color:"var(--mu)",marginBottom:20}}>
-              {pct>=.99?"Treino 100% concluído! Incrível 🏆":`Você completou ${Math.round(pct*100)}% do treino. Tem certeza que quer encerrar?`}
+              {pct>=.99?"Treino 100% concluído! Incrível 🏆":`Você completou ${Math.round(pct*100)}% do treino. Tem certeza?`}
             </div>
             <div style={{display:"flex",gap:10}}>
               <button onClick={()=>setShowConfirm(false)} style={{flex:1,padding:14,borderRadius:12,border:"1px solid var(--br)",background:"var(--s2)",color:"var(--mu)",fontWeight:700,fontSize:14,cursor:"pointer",fontFamily:"DM Sans"}}>Continuar</button>
-              <button onClick={handleFinish} style={{flex:2,padding:14,borderRadius:12,border:"none",background:`linear-gradient(135deg,${col},${col}aa)`,color:"#000",fontWeight:800,fontSize:14,cursor:"pointer",fontFamily:"DM Sans"}}>
+              <button onClick={handleFinish} style={{flex:2,padding:14,borderRadius:12,border:"none",background:`linear-gradient(135deg,${col},${col}aa)`,color:wk.type==="abs"?"#000":wk.type==="legs"?"#000":"#000",fontWeight:800,fontSize:14,cursor:"pointer",fontFamily:"DM Sans"}}>
                 {pct>=.99?"🏆 Finalizar":"Encerrar mesmo assim"}
               </button>
             </div>
@@ -469,7 +668,6 @@ function WkScreen({wk,onBack,onFinish,goTab}){
         </div>,
         document.body
       )}
-
       {/* HEADER */}
       <div style={{flexShrink:0,background:`linear-gradient(160deg,${col}22,${col}08,${bg})`,borderBottom:"1px solid var(--br)",padding:"max(env(safe-area-inset-top),14px) 16px 16px"}}>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:14}}>
@@ -486,43 +684,64 @@ function WkScreen({wk,onBack,onFinish,goTab}){
           <div style={{fontSize:13,color:"var(--mu)"}}>{wk.ex.length} exercícios</div>
           <div style={{width:3,height:3,borderRadius:"50%",background:"var(--br)"}}/>
           <div style={{fontSize:13,color:col,fontWeight:600}}>{done.length} concluídos</div>
-          <div style={{width:3,height:3,borderRadius:"50%",background:"var(--br)"}}/>
-          <div style={{fontSize:13,color:"var(--mu)"}}>descanso {wk.rest}s</div>
         </div>
         <div style={{height:4,background:"var(--br)",borderRadius:4,overflow:"hidden"}}>
           <div style={{height:"100%",background:`linear-gradient(90deg,${col},${col}99)`,borderRadius:4,width:`${pct*100}%`,transition:"width .4s"}}/>
         </div>
       </div>
-
-      {/* LIST */}
-      <div className="pg" style={{padding:"12px 16px 0"}}>
-        {wk.ex.map((ex,i)=>{
-          let has=false;try{const logs=lsGet(`lg_${wk.id}_${ex.id}`,[]);has=logs.length>0}catch{}
-          const dn=done.includes(ex.id);
-          return(
-            <div key={ex.id} className="ex-row" style={{opacity:dn?.65:1,background:dn?s1:"var(--s1)"}} onClick={()=>setSelEx(ex)}>
-              <div style={{fontFamily:"Bebas Neue",fontSize:22,color:"var(--br)",lineHeight:1,width:28,flexShrink:0,textAlign:"center"}}>{String(i+1).padStart(2,"0")}</div>
-              <div style={{flex:1,minWidth:0}}>
-                <div style={{fontSize:14,fontWeight:600,color:"var(--tx)",textDecoration:dn?"line-through":"none",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ex.n}</div>
-                <div style={{fontSize:12,color:"var(--mu)",marginTop:2}}>{ex.s} séries · {ex.r} reps</div>
-                <div style={{display:"flex",alignItems:"center",gap:4,marginTop:3}}>
-                  <div style={{width:5,height:5,borderRadius:"50%",background:has?"var(--acc)":"var(--br)"}}/>
-                  <span style={{fontSize:10,color:"var(--mu)"}}>{has?"Carga registrada":"Sem registro"}</span>
+      {/* If it's abs/tabata, show big START TABATA button + exercise preview */}
+      {wk.tabata?(
+        <div className="pg" style={{padding:"16px"}}>
+          <div style={{background:"linear-gradient(135deg,rgba(255,159,67,.1),rgba(255,159,67,.03))",border:"1px solid rgba(255,159,67,.3)",borderRadius:16,padding:20,marginBottom:16,textAlign:"center"}}>
+            <div style={{fontSize:36,marginBottom:8}}>🔥</div>
+            <div style={{fontFamily:"Bebas Neue",fontSize:22,color:"#ff9f43",letterSpacing:2,marginBottom:4}}>MODO TABATA</div>
+            <div style={{fontSize:13,color:"var(--mu)",marginBottom:16}}>20s execução · 10s descanso · 3 rounds · {wk.ex.length} exercícios</div>
+            <button onClick={()=>setShowTabata(true)} style={{width:"100%",padding:18,borderRadius:14,border:"none",background:"linear-gradient(135deg,#ff9f43,#ff6b35)",color:"#000",fontWeight:800,fontSize:16,cursor:"pointer",fontFamily:"DM Sans"}}>
+              🔥 INICIAR TABATA
+            </button>
+          </div>
+          <div className="stl">Sequência de exercícios</div>
+          {wk.ex.map((ex,i)=>(
+            <div key={ex.id} className="ex-row" onClick={()=>setSelEx(ex)}>
+              <div style={{fontFamily:"Bebas Neue",fontSize:22,color:"#ff9f43",lineHeight:1,width:28,flexShrink:0,textAlign:"center"}}>{i+1}</div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:14,fontWeight:600}}>{ex.n}</div>
+                <div style={{fontSize:11,color:"var(--mu)",marginTop:2}}>20s · ver detalhes</div>
+              </div>
+              <I.arr/>
+            </div>
+          ))}
+          <div style={{height:12}}/>
+        </div>
+      ):(
+        <div className="pg" style={{padding:"12px 16px 0"}}>
+          {wk.ex.map((ex,i)=>{
+            let has=false;try{const logs=lsGet(`lg_${wk.id}_${ex.id}`,[]);has=logs.length>0}catch{}
+            const dn=done.includes(ex.id);
+            return(
+              <div key={ex.id} className="ex-row" style={{opacity:dn?.65:1,background:dn?s1:"var(--s1)"}} onClick={()=>setSelEx(ex)}>
+                <div style={{fontFamily:"Bebas Neue",fontSize:22,color:"var(--br)",lineHeight:1,width:28,flexShrink:0,textAlign:"center"}}>{String(i+1).padStart(2,"0")}</div>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:14,fontWeight:600,textDecoration:dn?"line-through":"none",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{ex.n}</div>
+                  <div style={{fontSize:12,color:"var(--mu)",marginTop:2}}>{ex.s} séries · {ex.r} reps</div>
+                  <div style={{display:"flex",alignItems:"center",gap:4,marginTop:3}}>
+                    <div style={{width:5,height:5,borderRadius:"50%",background:has?"var(--acc)":"var(--br)"}}/>
+                    <span style={{fontSize:10,color:"var(--mu)"}}>{has?"Carga registrada":"Sem registro"}</span>
+                  </div>
+                </div>
+                <div className={`ex-chk${dn?" on":""}`} onClick={e=>{e.stopPropagation();const next=dn?done.filter(x=>x!==ex.id):[...done,ex.id];saveDone(next);}}>
+                  {dn&&<I.chk/>}
                 </div>
               </div>
-              <div className={`ex-chk${dn?" on":""}`} onClick={e=>{e.stopPropagation();const next=dn?done.filter(x=>x!==ex.id):[...done,ex.id];saveDone(next);}}>
-                {dn&&<I.chk/>}
-              </div>
-            </div>
-          );
-        })}
-        {/* FINISH */}
-        <button onClick={()=>setShowConfirm(true)} className={pct>=.99?"pulse":""}
-          style={{width:"100%",padding:18,margin:"8px 0",borderRadius:14,border:pct>=.99?"none":"1px solid var(--br)",background:pct>=.99?`linear-gradient(135deg,${col},${col}aa)`:"var(--s2)",color:pct>=.99?"#000":"var(--mu)",fontWeight:800,fontSize:15,letterSpacing:.5,textTransform:"uppercase",cursor:"pointer",fontFamily:"DM Sans",boxShadow:pct>=.99?`0 0 28px ${col}55`:"none",transition:"all .3s"}}>
-          {pct>=.99?"🏆 Finalizar Treino":`Encerrar · ${Math.round(pct*100)}% completo`}
-        </button>
-        <div style={{height:12}}/>
-      </div>
+            );
+          })}
+          <button onClick={()=>setShowConfirm(true)} className={pct>=.99?"pulse":""}
+            style={{width:"100%",padding:18,margin:"8px 0",borderRadius:14,border:pct>=.99?"none":"1px solid var(--br)",background:pct>=.99?`linear-gradient(135deg,${col},${col}aa)`:"var(--s2)",color:pct>=.99?"#000":"var(--mu)",fontWeight:800,fontSize:15,letterSpacing:.5,textTransform:"uppercase",cursor:"pointer",fontFamily:"DM Sans",boxShadow:pct>=.99?`0 0 28px ${col}55`:"none",transition:"all .3s"}}>
+            {pct>=.99?"🏆 Finalizar Treino":`Encerrar · ${Math.round(pct*100)}% completo`}
+          </button>
+          <div style={{height:12}}/>
+        </div>
+      )}
       <div className="nav">
         {[["home","Início",<I.home/>],["diet","Dieta",<I.diet/>],["rewards","Conquistas",<I.trophy/>],["profile","Perfil",<I.user/>]].map(([id,lb,ic])=>(
           <button key={id} className="nb" onClick={()=>goTab(id)}>{ic}{lb}</button>
@@ -536,16 +755,14 @@ function WkScreen({wk,onBack,onFinish,goTab}){
 function HomeScreen({onStart,total,streak}){
   const today=new Date();
   const ti=today.getDay();
-  const [sel,setSel]=useState(ti);
-  const [trained]=useLS("trained_dates",[]);
-  const [wlog]=useLS("weight_log",[]);
-
+  const[sel,setSel]=useState(ti);
+  const[trained]=useLS("trained_dates",[]);
+  const[wlog]=useLS("weight_log",[]);
   const wdates=Array.from({length:7},(_,i)=>{const d=new Date(today);d.setDate(today.getDate()-ti+i);return d.getDate()});
   const selWid=SCHED[sel];
+  // BUG FIX: abs is now SCHED[6] (Saturday), not in ABS_DAYS
   const selW=selWid!=="rest"?WK[selWid]:null;
   const todW=SCHED[ti]!=="rest"?WK[SCHED[ti]]:null;
-  const todayHasAbs=ABS_DAYS.includes(ti);
-  const selHasAbs=ABS_DAYS.includes(sel);
   const daysLeft=Math.ceil((new Date(2026,7,1)-today)/86400000);
   const lastW=wlog.length?wlog[wlog.length-1].kg:"78";
 
@@ -554,11 +771,9 @@ function HomeScreen({onStart,total,streak}){
       <div style={{background:"linear-gradient(160deg,#1a1a1a 0%,var(--bg) 100%)",padding:"max(env(safe-area-inset-top),20px) 16px 0",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:-40,right:-40,width:180,height:180,background:"radial-gradient(circle,rgba(200,241,53,.1) 0%,transparent 70%)",pointerEvents:"none"}}/>
         <div style={{fontFamily:"Space Mono",fontSize:10,color:"var(--acc)",letterSpacing:2,textTransform:"uppercase",marginBottom:3}}>// BOA NOITE</div>
-        <div style={{fontFamily:"Bebas Neue",fontSize:46,letterSpacing:3,lineHeight:1,color:"var(--tx)"}}>HELLDER</div>
+        <div style={{fontFamily:"Bebas Neue",fontSize:46,letterSpacing:3,lineHeight:1}}>HELLDER</div>
         <div style={{fontSize:13,color:"var(--mu)",marginTop:4,marginBottom:16,fontWeight:300}}>Shape de agosto — cada dia conta 💪</div>
       </div>
-
-      {/* STATS */}
       <div style={{display:"flex",gap:8,padding:"12px 16px"}}>
         {[[daysLeft,"Dias p/ ago","var(--acc)"],[`🔥${streak}`,"Streak","var(--gold)"],[lastW+"kg","Peso","#ff6464"],[total,"Treinos","var(--grn)"]].map(([v,l,c],i)=>(
           <div key={i} style={{flex:1,background:"var(--s1)",border:"1px solid var(--br)",borderRadius:12,padding:"9px 6px",textAlign:"center"}}>
@@ -567,7 +782,6 @@ function HomeScreen({onStart,total,streak}){
           </div>
         ))}
       </div>
-
       {/* WEEK BAR */}
       <div style={{padding:"0 16px 14px"}}>
         <div className="stl">Semana — Maio 2026</div>
@@ -576,100 +790,93 @@ function HomeScreen({onStart,total,streak}){
             const wid=SCHED[i];
             const ds=new Date(today.getFullYear(),today.getMonth(),wdates[i]).toDateString();
             const wasTr=trained.includes(ds);
-            const isToday=i===ti; const isSel=i===sel;
-            const hasAbs=ABS_DAYS.includes(i);
+            const isToday=i===ti;const isSel=i===sel;
+            const wCol=wid!=="rest"?(TC[wid]||"var(--acc)"):"var(--br)";
             return(
               <button key={i} onClick={()=>setSel(i)} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:2,padding:"7px 3px",borderRadius:10,cursor:"pointer",border:`1px solid ${isSel||isToday?"var(--acc)":"transparent"}`,background:isSel?"rgba(200,241,53,.1)":isToday?"rgba(200,241,53,.05)":"var(--s1)"}}>
                 <span style={{fontSize:7,color:"var(--mu)",fontWeight:700,textTransform:"uppercase"}}>{d.slice(0,1)}</span>
                 <span style={{fontFamily:"Bebas Neue",fontSize:17,color:isToday?"var(--acc)":"var(--tx)",lineHeight:1}}>{wdates[i]}</span>
-                <div style={{display:"flex",gap:2}}>
-                  <div style={{width:5,height:5,borderRadius:"50%",background:wasTr?"var(--grn)":wid!=="rest"?"var(--acc)":"var(--br)",opacity:wasTr||wid!=="rest"?1:.4}}/>
-                  {hasAbs&&<div style={{width:5,height:5,borderRadius:"50%",background:"#ff9f43",opacity:.8}}/>}
-                </div>
+                <div style={{width:5,height:5,borderRadius:"50%",background:wasTr?"var(--grn)":wCol,opacity:wasTr||wid!=="rest"?1:.4}}/>
               </button>
             );
           })}
         </div>
       </div>
-
       {/* TODAY CARD */}
       {sel===ti&&todW&&(
         <div style={{margin:"0 16px 12px",background:`linear-gradient(135deg,${TC[todW.type]}18,${TC[todW.type]}06,#111)`,border:`1px solid ${TC[todW.type]}44`,borderRadius:18,padding:18,cursor:"pointer",position:"relative",overflow:"hidden"}} onClick={()=>onStart(todW)}>
           <div style={{position:"absolute",top:-20,right:-20,width:100,height:100,background:`radial-gradient(circle,${TC[todW.type]}20 0%,transparent 70%)`}}/>
-          <div style={{fontFamily:"Space Mono",fontSize:9,color:TC[todW.type],letterSpacing:2,textTransform:"uppercase",marginBottom:5}}>▶ TREINO DE HOJE</div>
+          <div style={{fontFamily:"Space Mono",fontSize:9,color:TC[todW.type],letterSpacing:2,textTransform:"uppercase",marginBottom:5}}>
+            {todW.tabata?"🔥 TABATA DE HOJE":"▶ TREINO DE HOJE"}
+          </div>
           <div style={{fontFamily:"Bebas Neue",fontSize:40,letterSpacing:3,lineHeight:1,color:TC[todW.type],marginBottom:4}}>{todW.name}</div>
-          <div style={{fontSize:13,color:"var(--mu)",marginBottom:14}}>{todW.label} · {todW.ex.length} exercícios · {todW.rest}s descanso</div>
-          <button style={{width:"100%",padding:14,borderRadius:12,border:"none",background:TC[todW.type],color:"#000",fontWeight:800,fontSize:14,cursor:"pointer",fontFamily:"DM Sans",letterSpacing:.5}}>▶ INICIAR AGORA</button>
+          <div style={{fontSize:13,color:"var(--mu)",marginBottom:14}}>
+            {todW.tabata?`${todW.ex.length} exercícios · 20s/10s · 3 rounds`:
+            `${todW.label} · ${todW.ex.length} exercícios · ${todW.rest}s descanso`}
+          </div>
+          <button style={{width:"100%",padding:14,borderRadius:12,border:"none",background:TC[todW.type],color:"#000",fontWeight:800,fontSize:14,cursor:"pointer",fontFamily:"DM Sans",letterSpacing:.5}}>
+            {todW.tabata?"🔥 INICIAR TABATA":"▶ INICIAR AGORA"}
+          </button>
         </div>
       )}
-
-      {/* ABS CARD — shown when today or selected day has abs */}
-      {((sel===ti&&todayHasAbs)||(sel!==ti&&selHasAbs))&&(
-        <div style={{margin:"0 16px 12px",background:"linear-gradient(135deg,rgba(255,159,67,.12),rgba(255,159,67,.04),#111)",border:"1px solid rgba(255,159,67,.3)",borderRadius:16,padding:16,cursor:"pointer"}} onClick={()=>onStart(WK.abs)}>
-          <div style={{fontFamily:"Space Mono",fontSize:9,color:"#ff9f43",letterSpacing:2,textTransform:"uppercase",marginBottom:4}}>🔥 FINALIZADOR DO DIA</div>
-          <div style={{fontFamily:"Bebas Neue",fontSize:28,letterSpacing:2,lineHeight:1,color:"#ff9f43",marginBottom:4}}>ABDOMINAL</div>
-          <div style={{fontSize:12,color:"var(--mu)",marginBottom:12}}>6 exercícios · 45s descanso · Após o treino principal</div>
-          <button style={{width:"100%",padding:11,borderRadius:10,border:"none",background:"#ff9f43",color:"#000",fontWeight:800,fontSize:13,cursor:"pointer",fontFamily:"DM Sans"}}>🔥 INICIAR ABDOMINAL</button>
-        </div>
-      )}
-
-      <div className="sec">
-        <div className="stl">{sel===ti?"Todos os treinos":"Treino de "+WN[sel]}</div>
-        {selW?(
-          <div style={{background:"var(--s1)",border:"1px solid var(--br)",borderRadius:16,cursor:"pointer",marginBottom:8}} onClick={()=>onStart(selW)}>
+      {/* Selected day non-today */}
+      {sel!==ti&&selW&&(
+        <div style={{margin:"0 16px 12px"}}>
+          <div style={{background:"var(--s1)",border:"1px solid var(--br)",borderRadius:16,cursor:"pointer"}} onClick={()=>onStart(selW)}>
             <div style={{padding:14,display:"flex",alignItems:"center",gap:12}}>
-              <div style={{width:44,height:44,borderRadius:12,background:`${TC[selW.type]}18`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>{TI[selW.type]}</div>
+              <div style={{width:44,height:44,borderRadius:12,background:`${TC[selW.type]||"#ff9f43"}18`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>{TI[selW.type]}</div>
               <div style={{flex:1}}>
-                <div style={{fontSize:9,fontWeight:700,letterSpacing:1.5,textTransform:"uppercase",padding:"2px 8px",background:`${TC[selW.type]}15`,color:TC[selW.type],borderRadius:6,display:"inline-block",marginBottom:3}}>{selW.label}</div>
+                <div style={{fontSize:9,fontWeight:700,letterSpacing:1.5,textTransform:"uppercase",padding:"2px 8px",background:`${TC[selW.type]||"#ff9f43"}15`,color:TC[selW.type]||"#ff9f43",borderRadius:6,display:"inline-block",marginBottom:3}}>{selW.label}</div>
                 <div style={{fontFamily:"Bebas Neue",fontSize:22,letterSpacing:1,lineHeight:1}}>{selW.name}</div>
-                <div style={{fontSize:12,color:"var(--mu)",marginTop:2}}>{selW.ex.length} exercícios</div>
+                <div style={{fontSize:12,color:"var(--mu)",marginTop:2}}>{selW.ex.length} exercícios{selW.tabata?" · Tabata":""}</div>
               </div>
               <I.arr/>
             </div>
           </div>
-        ):(
-          <div style={{background:"var(--s1)",border:"1px solid var(--br)",borderRadius:16,padding:18,textAlign:"center"}}>
-            <div style={{fontSize:32,marginBottom:6}}>😴</div>
-            <div style={{fontFamily:"Bebas Neue",fontSize:22,color:"var(--mu)",letterSpacing:1}}>DIA DE DESCANSO</div>
-            <div style={{fontSize:13,color:"var(--mu)",marginTop:4}}>Recuperação é parte do treino.</div>
-          </div>
-        )}
-
-        {sel===ti&&(
-          <>
-            <div className="stl" style={{marginTop:18}}>Todos os treinos</div>
-            {Object.values(WK).map(w=>(
-              <div key={w.id} style={{background:"var(--s1)",border:"1px solid var(--br)",borderRadius:14,cursor:"pointer",marginBottom:7}} onClick={()=>onStart(w)}>
-                <div style={{padding:"12px 14px",display:"flex",alignItems:"center",gap:11}}>
-                  <div style={{width:40,height:40,borderRadius:10,background:`${TC[w.type]||"#ff9f43"}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{TI[w.type]}</div>
-                  <div style={{flex:1}}>
-                    <span style={{fontSize:9,fontWeight:700,letterSpacing:1.5,textTransform:"uppercase",padding:"2px 7px",background:`${TC[w.type]||"#ff9f43"}15`,color:TC[w.type]||"#ff9f43",borderRadius:5,marginBottom:3,display:"inline-block"}}>{w.label}</span>
-                    <div style={{fontFamily:"Bebas Neue",fontSize:19,letterSpacing:1,lineHeight:1}}>{w.name}</div>
-                    <div style={{fontSize:11,color:"var(--mu)",marginTop:1}}>{w.ex.length} exercícios</div>
-                  </div>
-                  <I.arr/>
+        </div>
+      )}
+      {/* Rest day */}
+      {selW===null&&(
+        <div style={{margin:"0 16px 12px",background:"var(--s1)",border:"1px solid var(--br)",borderRadius:16,padding:18,textAlign:"center"}}>
+          <div style={{fontSize:32,marginBottom:6}}>😴</div>
+          <div style={{fontFamily:"Bebas Neue",fontSize:22,color:"var(--mu)",letterSpacing:1}}>DIA DE DESCANSO</div>
+          <div style={{fontSize:13,color:"var(--mu)",marginTop:4}}>Recuperação é parte do treino.</div>
+        </div>
+      )}
+      {/* BUG FIX: "Todos os treinos" only shows on today's view, abs listed separately */}
+      {sel===ti&&(
+        <div style={{padding:"0 16px"}}>
+          <div className="stl">Todos os treinos</div>
+          {Object.values(WK).map(w=>(
+            <div key={w.id} style={{background:"var(--s1)",border:"1px solid var(--br)",borderRadius:14,cursor:"pointer",marginBottom:7}} onClick={()=>onStart(w)}>
+              <div style={{padding:"12px 14px",display:"flex",alignItems:"center",gap:11}}>
+                <div style={{width:40,height:40,borderRadius:10,background:`${TC[w.type]||"#ff9f43"}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{TI[w.type]}</div>
+                <div style={{flex:1}}>
+                  <span style={{fontSize:9,fontWeight:700,letterSpacing:1.5,textTransform:"uppercase",padding:"2px 7px",background:`${TC[w.type]||"#ff9f43"}15`,color:TC[w.type]||"#ff9f43",borderRadius:5,marginBottom:3,display:"inline-block"}}>{w.label}</span>
+                  <div style={{fontFamily:"Bebas Neue",fontSize:19,letterSpacing:1,lineHeight:1}}>{w.name}</div>
+                  <div style={{fontSize:11,color:"var(--mu)",marginTop:1}}>{w.ex.length} exercícios{w.tabata?" · Tabata":""}</div>
                 </div>
+                <I.arr/>
               </div>
-            ))}
-          </>
-        )}
-        <div style={{height:8}}/>
-      </div>
+            </div>
+          ))}
+          <div style={{height:16}}/>
+        </div>
+      )}
     </div>
   );
 }
 
 // ─── DIET SCREEN ─────────────────────────────────────────────────────────────
 function DietScreen(){
-  const [done,setDone]=useLS("meals_done",[]);
-  const [water,setWater]=useLS("water_cups",0);
-  const [open,setOpen]=useState(null);
-  const [wlog,setWlog]=useLS("weight_log",[]);
-  const [tw,setTw]=useState("");
+  const[done,setDone]=useLS("meals_done",[]);
+  const[water,setWater]=useLS("water_cups",0);
+  const[open,setOpen]=useState(null);
+  const[wlog,setWlog]=useLS("weight_log",[]);
+  const[tw,setTw]=useState("");
   const dkc=DIET.meals.filter(m=>done.includes(m.id)).reduce((a,m)=>a+m.kcal,0);
   const pct=Math.round((dkc/DIET.kcal)*100);
   const saveW=()=>{if(!tw)return;const d=new Date().toLocaleDateString("pt-BR");setWlog(l=>[...l.filter(x=>x.d!==d),{d,kg:parseFloat(tw)}].slice(-30));setTw("");};
-
   return(
     <div className="pg">
       <div style={{padding:"max(env(safe-area-inset-top),20px) 16px 0"}}>
@@ -687,23 +894,15 @@ function DietScreen(){
             </div>
           ))}
         </div>
-
-        {/* SUPLEMENTOS */}
         <div style={{background:"linear-gradient(135deg,rgba(200,241,53,.06),rgba(200,241,53,.02))",border:"1px solid rgba(200,241,53,.2)",borderRadius:14,padding:14,marginBottom:14}}>
           <div className="stl">Protocolo de suplementação</div>
-          {[
-            ["07h40","VitaDaily (1 caps) + Ômega 3 (3 caps)","Com o café da manhã"],
-            ["12h50","Creatina Dux (5g)","Com o almoço — diária"],
-            ["00h","Whey (40g) + Magnésio Malato (2 caps)","Pós-treino, antes de dormir"],
-          ].map(([h,s,d],i)=>(
+          {[["07h40","VitaDaily (1 caps) + Ômega 3 (3 caps)","Com o café da manhã"],["12h50","Creatina Dux (5g)","Com o almoço — diária"],["00h","Whey (40g) + Magnésio Malato (2 caps)","Pós-treino, antes de dormir"]].map(([h,s,d],i)=>(
             <div key={i} style={{display:"flex",gap:12,padding:"9px 0",borderBottom:i<2?"1px solid var(--br)":"none"}}>
               <div style={{fontFamily:"Space Mono",fontSize:11,color:"var(--acc)",flexShrink:0,width:44}}>{h}</div>
-              <div><div style={{fontSize:13,color:"var(--tx)",fontWeight:600}}>{s}</div><div style={{fontSize:11,color:"var(--mu)",marginTop:1}}>{d}</div></div>
+              <div><div style={{fontSize:13,fontWeight:600}}>{s}</div><div style={{fontSize:11,color:"var(--mu)",marginTop:1}}>{d}</div></div>
             </div>
           ))}
         </div>
-
-        {/* PESO */}
         <div style={{background:"var(--s1)",border:"1px solid var(--br)",borderRadius:14,padding:14,marginBottom:14}}>
           <div className="stl">Peso corporal diário</div>
           <div style={{display:"flex",gap:8,marginBottom:wlog.length>=2?12:0}}>
@@ -715,38 +914,27 @@ function DietScreen(){
           {wlog.length>=2&&(
             <div style={{background:"var(--s2)",borderRadius:10,padding:"10px 10px 6px"}}>
               <div className="bar-chart">
-                {wlog.slice(-8).map((w,i)=>{
-                  const all=wlog.slice(-8).map(x=>x.kg);const mn=Math.min(...all),mx=Math.max(...all);
-                  const h=mx===mn?36:((w.kg-mn)/(mx-mn))*44+10;
+                {wlog.slice(-8).map((w,i)=>{const all=wlog.slice(-8).map(x=>x.kg);const mn=Math.min(...all),mx=Math.max(...all);const h=mx===mn?36:((w.kg-mn)/(mx-mn))*44+10;
                   return<div key={i} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
                     <span style={{fontSize:7,color:"#ff6464",fontFamily:"Space Mono",fontWeight:700}}>{w.kg}</span>
                     <div style={{flex:1,width:"100%",display:"flex",alignItems:"flex-end"}}>
                       <div style={{width:"100%",height:`${h}px`,background:"linear-gradient(180deg,#ff6464,rgba(255,100,100,.2))",borderRadius:"3px 3px 0 0"}}/>
                     </div>
-                  </div>;
-                })}
+                  </div>;})}
               </div>
-              <div style={{display:"flex",gap:4}}>
-                {wlog.slice(-8).map((w,i)=><div key={i} style={{flex:1,textAlign:"center",fontSize:7,color:"var(--mu)",fontFamily:"Space Mono"}}>{w.d?.slice(0,5)}</div>)}
-              </div>
+              <div style={{display:"flex",gap:4}}>{wlog.slice(-8).map((w,i)=><div key={i} style={{flex:1,textAlign:"center",fontSize:7,color:"var(--mu)",fontFamily:"Space Mono"}}>{w.d?.slice(0,5)}</div>)}</div>
             </div>
           )}
         </div>
-
-        {/* WATER */}
         <div style={{background:"var(--s1)",border:"1px solid var(--br)",borderRadius:14,padding:14,marginBottom:14}}>
           <div className="stl">Hidratação — {(water*.25).toFixed(2)}L / {DIET.water}L</div>
           <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:8}}>
             {Array.from({length:14},(_,i)=>(
-              <button key={i} className={`water-cup${i<water?" on":""}`} onClick={()=>setWater(i<water?i:i+1)}>
-                {i<water?"💧":"🫙"}
-              </button>
+              <button key={i} className={`water-cup${i<water?" on":""}`} onClick={()=>setWater(i<water?i:i+1)}>{i<water?"💧":"🫙"}</button>
             ))}
           </div>
-          <div style={{fontSize:11,color:"var(--mu)"}}>{14-water} copos restantes para bater a meta</div>
+          <div style={{fontSize:11,color:"var(--mu)"}}>{14-water} copos restantes</div>
         </div>
-
-        {/* MEALS */}
         <div className="stl">Refeições do dia</div>
         {DIET.meals.map(meal=>{
           const dn=done.includes(meal.id);const op=open===meal.id;
@@ -766,9 +954,7 @@ function DietScreen(){
                     <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",padding:"7px 0",borderBottom:i<meal.foods.length-1?"1px solid var(--br)":"none"}}>
                       <div>
                         <div style={{fontSize:13}}>{f.n}</div>
-                        <div style={{display:"flex",gap:8,marginTop:2}}>
-                          {[["P",f.p],["C",f.c],["G",f.f]].map(([l,v])=><span key={l} style={{fontSize:10,color:"var(--mu)"}}>{l}:<strong style={{color:"var(--tx)"}}>{v}g</strong></span>)}
-                        </div>
+                        <div style={{display:"flex",gap:8,marginTop:2}}>{[["P",f.p],["C",f.c],["G",f.f]].map(([l,v])=><span key={l} style={{fontSize:10,color:"var(--mu)"}}>{l}:<strong style={{color:"var(--tx)"}}>{v}g</strong></span>)}</div>
                       </div>
                       <div style={{fontSize:12,color:"var(--mu)"}}>{f.a}</div>
                     </div>
@@ -790,18 +976,17 @@ function DietScreen(){
 
 // ─── REWARDS SCREEN ───────────────────────────────────────────────────────────
 function RewardsScreen({total,streak}){
-  const [stats,setStats]=useLS("bstats",{weight:"78",waist:"",chest:"",arm:""});
-  const [photos,setPhotos]=useLS("photos",[]);
-  const [saved,setSaved]=useState(false);
-  const [rr,setRr]=useState("");const [rk,setRk]=useState("");
-  const [trained]=useLS("trained_dates",[]);
+  const[stats,setStats]=useLS("bstats",{weight:"78",waist:"",chest:"",arm:""});
+  const[photos,setPhotos]=useLS("photos",[]);
+  const[saved,setSaved]=useState(false);
+  const[rr,setRr]=useState("");const[rk,setRk]=useState("");
+  const[trained]=useLS("trained_dates",[]);
   const fRef=useRef();
   const xp=total*100+streak*50;const lv=Math.floor(xp/500)+1;const lxp=xp%500;
   const oneRM=rr&&rk?rm1(parseInt(rr),parseFloat(rk)):null;
   const today=new Date();
   const cells=Array.from({length:35},(_,i)=>{const d=new Date(today);d.setDate(today.getDate()-34+i);return{tr:trained.includes(d.toDateString()),today:d.toDateString()===today.toDateString(),rest:SCHED[d.getDay()]==="rest"}});
   const addPh=e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=ev=>setPhotos(p=>[{date:new Date().toLocaleDateString("pt-BR"),url:ev.target.result},...p].slice(0,12));r.readAsDataURL(f)};
-
   return(
     <div className="pg">
       <div style={{padding:"max(env(safe-area-inset-top),20px) 16px 0"}}>
@@ -809,7 +994,6 @@ function RewardsScreen({total,streak}){
         <div style={{fontSize:13,color:"var(--mu)",marginBottom:14}}>Seu progresso rumo ao shape</div>
       </div>
       <div style={{padding:"0 16px"}}>
-        {/* XP */}
         <div style={{background:"var(--s1)",border:"1px solid var(--br)",borderRadius:14,padding:14,marginBottom:12}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
             <div>
@@ -818,16 +1002,14 @@ function RewardsScreen({total,streak}){
             </div>
             <div style={{textAlign:"right"}}>
               <div style={{fontSize:11,color:"var(--mu)",fontFamily:"Space Mono"}}>{xp} XP total</div>
-              <div style={{fontSize:14,fontWeight:700,color:"var(--tx)",marginTop:2}}>{total} treinos</div>
+              <div style={{fontSize:14,fontWeight:700,marginTop:2}}>{total} treinos</div>
             </div>
           </div>
           <div style={{height:8,background:"var(--br)",borderRadius:4,overflow:"hidden",marginBottom:5}}>
-            <div style={{height:"100%",background:"linear-gradient(90deg,var(--acc),#a0c020)",borderRadius:4,width:`${(lxp/500)*100}%`,transition:"width .8s"}}/>
+            <div style={{height:"100%",background:"linear-gradient(90deg,var(--acc),#a0c020)",borderRadius:4,width:`${(lxp/500)*100}%`}}/>
           </div>
           <div style={{fontSize:10,color:"var(--mu)",textAlign:"right",fontFamily:"Space Mono"}}>{500-lxp} XP para LVL {lv+1}</div>
         </div>
-
-        {/* STREAK */}
         <div style={{background:"linear-gradient(135deg,#1a1200,#0e0e0e)",border:"1px solid rgba(245,197,24,.25)",borderRadius:14,padding:14,marginBottom:12,display:"flex",alignItems:"center",gap:14}}>
           <div style={{fontSize:38}}>🔥</div>
           <div>
@@ -839,23 +1021,15 @@ function RewardsScreen({total,streak}){
             <div style={{fontFamily:"Bebas Neue",fontSize:28,color:"var(--gold)"}}>{total}</div>
           </div>
         </div>
-
-        {/* HEATMAP */}
         <div style={{background:"var(--s1)",border:"1px solid var(--br)",borderRadius:14,padding:14,marginBottom:12}}>
           <div className="stl">Calendário — últimos 35 dias</div>
-          <div style={{display:"flex",marginBottom:6}}>
-            {["D","S","T","Q","Q","S","S"].map((d,i)=><div key={i} style={{flex:1,textAlign:"center",fontSize:8,color:"var(--mu)",fontFamily:"Space Mono"}}>{d}</div>)}
-          </div>
-          <div className="hm">
-            {cells.map((c,i)=><div key={i} className={`hm-c${c.tr?" tr":""}${c.rest&&!c.tr?" re":""}${c.today?" td":""}`}/>)}
-          </div>
+          <div style={{display:"flex",marginBottom:6}}>{["D","S","T","Q","Q","S","S"].map((d,i)=><div key={i} style={{flex:1,textAlign:"center",fontSize:8,color:"var(--mu)",fontFamily:"Space Mono"}}>{d}</div>)}</div>
+          <div className="hm">{cells.map((c,i)=><div key={i} className={`hm-c${c.tr?" tr":""}${c.rest&&!c.tr?" re":""}${c.today?" td":""}`}/>)}</div>
           <div style={{display:"flex",gap:10,marginTop:8,fontSize:10,color:"var(--mu)",alignItems:"center"}}>
             <div style={{display:"flex",alignItems:"center",gap:3}}><div style={{width:9,height:9,borderRadius:2,background:"var(--acc)"}}/> Treino</div>
             <div style={{display:"flex",alignItems:"center",gap:3}}><div style={{width:9,height:9,borderRadius:2,background:"var(--s3)"}}/> Descanso</div>
           </div>
         </div>
-
-        {/* 1RM */}
         <div style={{background:"var(--s1)",border:"1px solid var(--br)",borderRadius:14,padding:14,marginBottom:12}}>
           <div className="stl">Calculadora de 1RM</div>
           <div style={{display:"flex",gap:8,marginBottom:12}}>
@@ -871,8 +1045,6 @@ function RewardsScreen({total,streak}){
             <div style={{fontSize:11,color:"var(--mu)",marginTop:3}}>Fórmula de Epley · valor teórico</div>
           </div>:<div style={{textAlign:"center",color:"var(--mu)",fontSize:13}}>Digite reps e kg para calcular</div>}
         </div>
-
-        {/* BADGES */}
         <div className="stl">Conquistas</div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:12}}>
           {BADGES.map(b=>{const u=b.ok(total,streak);return(
@@ -880,12 +1052,10 @@ function RewardsScreen({total,streak}){
               <div style={{fontSize:28}}>{b.ic}</div>
               <div style={{fontSize:11,fontWeight:700}}>{b.name}</div>
               <div style={{fontSize:10,color:"var(--mu)"}}>{b.desc}</div>
-              {u&&<div style={{fontSize:9,color:"var(--gold)",fontWeight:700,letterSpacing:.5}}>✨ DESBLOQUEADO</div>}
+              {u&&<div style={{fontSize:9,color:"var(--gold)",fontWeight:700}}>✨ DESBLOQUEADO</div>}
             </div>
           )})}
         </div>
-
-        {/* MEDIDAS */}
         <div className="stl">Medidas corporais</div>
         <div style={{background:"var(--s1)",border:"1px solid var(--br)",borderRadius:14,padding:14,marginBottom:12}}>
           {[["Peso","weight","kg"],["Cintura","waist","cm"],["Peito","chest","cm"],["Braço","arm","cm"]].map(([l,k,u])=>(
@@ -898,12 +1068,8 @@ function RewardsScreen({total,streak}){
               </div>
             </div>
           ))}
-          <button onClick={()=>{setSaved(true);setTimeout(()=>setSaved(false),2e3)}} className="btn-acc" style={{marginTop:12}}>
-            {saved?"✅ Salvo!":"Salvar medidas"}
-          </button>
+          <button onClick={()=>{setSaved(true);setTimeout(()=>setSaved(false),2e3)}} className="btn-acc" style={{marginTop:12}}>{saved?"✅ Salvo!":"Salvar medidas"}</button>
         </div>
-
-        {/* PHOTOS */}
         <div className="stl">Fotos de progresso</div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:12}}>
           <div className="ph-slot" onClick={()=>fRef.current?.click()}><span style={{fontSize:22}}>📸</span><span>Adicionar</span></div>
@@ -915,7 +1081,6 @@ function RewardsScreen({total,streak}){
             </div>
           ))}
         </div>
-
         <div style={{background:"linear-gradient(135deg,#0a1400,#080808)",border:"1px solid rgba(200,241,53,.15)",borderRadius:14,padding:16,marginBottom:20,textAlign:"center"}}>
           <div style={{fontSize:9,color:"var(--acc)",fontFamily:"Space Mono",letterSpacing:2,textTransform:"uppercase",marginBottom:6}}>Meta Principal</div>
           <div style={{fontFamily:"Bebas Neue",fontSize:28}}>🎯 SHAPE AGOSTO 2026</div>
@@ -939,15 +1104,14 @@ function ProfileScreen({total}){
       <div style={{padding:"0 16px"}}>
         <div className="stl">Programa ativo</div>
         <div style={{background:"linear-gradient(135deg,#1a1f0a,#111)",border:"1px solid rgba(200,241,53,.25)",borderRadius:16,padding:16,marginBottom:14}}>
-          <div style={{fontFamily:"Bebas Neue",fontSize:18,color:"var(--acc)",letterSpacing:1}}>PUSH · PULL · LEGS · UPPER · LOWER + ABS</div>
-          <div style={{fontSize:12,color:"var(--mu)",marginTop:3}}>5 treinos principais · Abdominal Seg+Ter · Descanso Sáb+Dom</div>
+          <div style={{fontFamily:"Bebas Neue",fontSize:18,color:"var(--acc)",letterSpacing:1}}>PUSH · PULL · LEGS · UPPER · LOWER · ABS</div>
+          <div style={{fontSize:12,color:"var(--mu)",marginTop:3}}>6 dias ativos · Tabata no Sábado · Descanso Domingo</div>
           <div style={{display:"flex",gap:4,marginTop:10,flexWrap:"wrap"}}>
-            {[["Dom","—"],["Seg","A Push + Abs"],["Ter","B Pull + Abs"],["Qua","C Legs"],["Qui","D Upper"],["Sex","E Lower"],["Sáb","—"]].map(([d,t])=>(
-              <span key={d} style={{fontSize:9,padding:"2px 8px",borderRadius:6,fontWeight:700,background:t==="—"?"var(--s3)":t.includes("Abs")?"rgba(255,159,67,.1)":"rgba(200,241,53,.1)",color:t==="—"?"var(--mu)":t.includes("Abs")?"#ff9f43":"var(--acc)"}}>{d}: {t}</span>
+            {[["Dom","—"],["Seg","A Push"],["Ter","B Pull"],["Qua","C Legs"],["Qui","D Upper"],["Sex","E Lower + Hip Thrust"],["Sáb","Abs Tabata"]].map(([d,t])=>(
+              <span key={d} style={{fontSize:9,padding:"2px 8px",borderRadius:6,fontWeight:700,background:t==="—"?"var(--s3)":t.includes("Tabata")?"rgba(255,159,67,.1)":"rgba(200,241,53,.1)",color:t==="—"?"var(--mu)":t.includes("Tabata")?"#ff9f43":"var(--acc)"}}>{d}: {t}</span>
             ))}
           </div>
         </div>
-
         <div className="stl">Suplementação</div>
         <div style={{background:"var(--s1)",border:"1px solid var(--br)",borderRadius:14,padding:14,marginBottom:14}}>
           {[["07h40","VitaDaily + Ômega 3","Vitaminas + gorduras saudáveis"],["12h50","Creatina 5g","Com o almoço — todo dia"],["00h","Whey 40g + Magnésio","Pós-treino + qualidade do sono"]].map(([h,s,d],i)=>(
@@ -957,7 +1121,6 @@ function ProfileScreen({total}){
             </div>
           ))}
         </div>
-
         <div className="stl">Resumo</div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:14}}>
           {[["Treinos",total,"concluídos"],["IMC",imc,"kg/m²"],["Meta","Shape","ago/26"],["Nível",`LVL ${Math.floor((total*100)/500)+1}`,"XP"]].map(([l,v,s])=>(
@@ -970,7 +1133,7 @@ function ProfileScreen({total}){
         </div>
         <div className="stl">Dicas rápidas</div>
         <div style={{background:"var(--s1)",border:"1px solid var(--br)",borderRadius:14,padding:14,marginBottom:20}}>
-          {["💧 Beba água antes de cada série","😴 Durma 7-9h para maximizar a recuperação","🥩 Proteína em até 30min após o treino","📈 Progrida 2.5kg/mês nos exercícios compostos","🔥 Abdominal 2x por semana após Push e Pull","🧘 Alongue 10min após treinos de perna"].map((t,i,a)=>(
+          {["💧 Beba água antes de cada série","😴 Durma 7-9h para maximizar recuperação","🥩 Proteína em até 30min após o treino","📈 Progrida 2.5kg/mês nos compostos","🔥 Tabata todo sábado sem faltar — core forte é base","🦵 Hip Thrust toda sexta — glúteo = motor do corpo"].map((t,i,a)=>(
             <div key={i} style={{fontSize:13,color:"var(--mu)",padding:"8px 0",borderBottom:i<a.length-1?"1px solid var(--br)":"none"}}>{t}</div>
           ))}
         </div>
@@ -981,13 +1144,13 @@ function ProfileScreen({total}){
 
 // ─── APP ROOT ─────────────────────────────────────────────────────────────────
 function App(){
-  const [tab,setTab]=useState("home");
-  const [activeWk,setActiveWk]=useState(null);
-  const [toast,setToast]=useState({show:false,msg:""});
-  const [total,setTotal]=useLS("total_wk",0);
-  const [streak,setStreak]=useLS("streak",0);
-  const [lastD,setLastD]=useLS("last_d",null);
-  const [trained,setTrained]=useLS("trained_dates",[]);
+  const[tab,setTab]=useState("home");
+  const[activeWk,setActiveWk]=useState(null);
+  const[toast,setToast]=useState({show:false,msg:""});
+  const[total,setTotal]=useLS("total_wk",0);
+  const[streak,setStreak]=useLS("streak",0);
+  const[lastD,setLastD]=useLS("last_d",null);
+  const[trained,setTrained]=useLS("trained_dates",[]);
 
   const t2=msg=>{setToast({show:true,msg});setTimeout(()=>setToast(v=>({...v,show:false})),3000)};
   const goTab=t=>{setActiveWk(null);setTab(t)};
@@ -998,7 +1161,7 @@ function App(){
     if(lastD!==td){const y=new Date();y.setDate(y.getDate()-1);setStreak(s=>lastD===y.toDateString()?s+1:1);setLastD(td);}
     if(!trained.includes(td))setTrained(d=>[...d,td]);
     setActiveWk(null);
-    t2(`🏆 +100 XP — Treino ${w.name} concluído!`);
+    t2(`🏆 +100 XP — ${w.name} concluído!`);
   };
 
   const tabs=[["home","Início",<I.home/>],["diet","Dieta",<I.diet/>],["rewards","Conquistas",<I.trophy/>],["profile","Perfil",<I.user/>]];
